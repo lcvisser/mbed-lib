@@ -1,0 +1,34 @@
+MBED-LIB
+--------
+The project website is at
+
+http://code.google.com/p/mbed-lib
+
+The mbed-lib package provides development libraries for the mbed (http://mbed.org). There are two libraries:
+* libmbed is a custom library designed to easily interface the hardware on the mbed board.
+* liblpc17xx is compiled from the CMSIS source code files provided by ARM.
+Both are needed in order to build binaries for the mbed.
+
+
+REQUIREMENTS
+------------
+You can downlaod the binaries and source from
+
+http://code.google.com/p/mbed-lib/
+
+You need a gcc based toolchain for the ARM processors. I recommend the toolchain build provided by James Snyder (https://github.com/jsnyder/arm-eabi-toolchain).
+
+
+USAGE
+-----
+Running `make' builds both libmbed and liblpc17xx. Before doing so, you may need to change the Makefile a bit to indicate where the source files are to be found. By default, it assumed that the CMSIS sources are found in ./lpc17xx and the mbed sources in ./mbed. If you downloaded the archive files from the project website, or if you checked out the entire source tree, everything should work right away.
+
+The build targets `lpc17xx', `mbed', `clean', `clean-lpc17xx' and `clean-mbed' do exactly what you think they do.
+
+
+DISCLAIMER
+----------
+I did not write the code for the CMSIS library. This code was written by ARM, and they hold the copyright to this code. I made a few small modifications, which are listed in lpc17xx/README and on the project website.
+
+The mbed library  was started as an attempt to organize myself when writing code for the mbed. There are no warranties or guarantees whatsoever. If you find a bug, I would appreciate if report this on the project website.
+
