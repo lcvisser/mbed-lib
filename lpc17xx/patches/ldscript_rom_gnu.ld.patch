@@ -1,0 +1,4 @@
+21c21
+< GROUP(-lgcc -lc -lcs3 -lcs3unhosted -lcs3micro)
+---
+> /*GROUP(-lgcc -lc -lcs3 -lcs3unhosted -lcs3micro)*/

@@ -1,0 +1,5 @@
+Hardware support for the LPC17xx.
+
+device/				Device support for NXP LPC17xx.
+drivers/			Drivers for the NXP LPC17xx.
+patches/			Patches made to original source code supplied by NXP.

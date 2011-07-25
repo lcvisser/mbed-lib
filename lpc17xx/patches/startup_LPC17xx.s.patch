@@ -1,0 +1,4 @@
+147c147
+< 	LDR     R0,=_start
+---
+> 	LDR     R0,=main
