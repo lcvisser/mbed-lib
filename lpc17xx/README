@@ -1,5 +1,2 @@
-Hardware support for the LPC17xx.
-
-device/				Device support for NXP LPC17xx.
-drivers/			Drivers for the NXP LPC17xx.
-patches/			Patches made to original source code supplied by NXP.
+ldscript_rom_gnu.ld	Linker script.
+patches/		Patches to original LPC17xx CMSIS library provided by NXP.
