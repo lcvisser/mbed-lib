@@ -1,3 +1,10 @@
+/* Copyright (c) 2011 Ludo Visser
+ *
+ * This file is part of the mbed-lib project, and is distributed under the
+ * terms of the MIT License. The full license agreement text can be found
+ * in the LICENSE file.
+ */
+
 #include "LPC17xx.h"
 #include "lpc17xx_gpio.h"
 
@@ -10,7 +17,7 @@ void SysTick_Handler(void) {
 }
 
 /* Main initialization function */
-void sysInit(void) {
+void initSys(void) {
 	/* Update system clock register and reset counter. */
 	SystemCoreClockUpdate();
 	msTicks = 0;

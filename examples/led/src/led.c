@@ -3,7 +3,7 @@
 
 int main(void) {
 	/* Initialize the system. */
-	sysInit();
+	initSys();
 	initLED();
 
 	/* Alternate LEDs at 2 Hz. */

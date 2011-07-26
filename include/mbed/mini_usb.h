@@ -5,20 +5,15 @@
  * in the LICENSE file.
  */
 
-#ifndef _LED_H
-#define _LED_H
+#ifndef _MINI_USB_H
+#define _MINI_USB_H
 
 #include "LPC17xx.h"
 #include "lpc17xx_gpio.h"
+#include "lpc17xx_pinsel.h"
+#include "lpc17xx_uart.h"
 
-#define LED0	(1 << 18)
-#define LED1	(1 << 20)
-#define LED2	(1 << 21)
-#define LED3	(1 << 23)
-
-void initLED(void);
-void turnOnLED(uint32_t);
-void turnOffLED(uint32_t);
+void initMiniUSB(void);
 
 #endif
 

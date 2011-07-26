@@ -1,5 +1,5 @@
 #  Project Name
-PROJECT = mbed_leds
+PROJECT = mbed_led
 
 # Directory structure
 SOURCEDIRS = src
