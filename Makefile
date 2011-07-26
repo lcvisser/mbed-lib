@@ -10,7 +10,8 @@ OUTDIR = lib
 # Toolchain
 GCC = arm-none-eabi-gcc
 AS = arm-none-eabi-as
-AR = ar -rvs
+AR = arm-none-eabi-ar
+ARFLAGS = rcv
 MKDIR = mkdir
 RM = rm -f
 
@@ -32,14 +33,13 @@ VPATH = $(foreach DIR, $(SOURCEDIRS), $(strip $(DIR)):)
 
 # Build rules
 $(OUTDIR)/$(LIBNAME).a: $(OBJS) $(ASMOBJS)
+	$(AR) $(ARFLAGS) $(OUTDIR)/$(LIBNAME).a $(OBJS) $(ASMOBJS)
 
 $(BUILDDIR)/%.o: %.c
 	$(GCC) $(CFLAGS) -c -o $@ $<
-	$(AR) $(OUTDIR)/$(LIBNAME).a $@
 
 $(BUILDDIR)/asm/%.o: %.s
 	$(AS) $(ASFLAGS) -o $@ $<
-	$(AR) $(OUTDIR)/$(LIBNAME).a $@
 
 $(OBJS) $(ASMOBJS): | $(BUILDDIR)
 

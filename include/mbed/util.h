@@ -4,8 +4,8 @@
 #include "LPC17xx.h"
 
 void SysTick_Handler(void);
-__INLINE static void sysInit(void)
-__INLINE static void wait(uint32_t)
+void sysInit(void);
+void wait(uint32_t);
 
 #endif
 

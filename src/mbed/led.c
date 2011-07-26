@@ -1,21 +1,21 @@
 #include "led.h"
 
 /* LED initialization function */
-__INLINE static void initLED(void) {
-	/* Enable bits 18, 20, 21, 23 as outputs. */
-	GPIO_SetDir(1, LEDS, 1);
+void initLED(void) {
+	/* Enable bits corresponding to LEDs as outputs. */
+	GPIO_SetDir(1, LED0 | LED1 | LED2 | LED3, 1);
 
-	/* Turn all LEDs off. */
-	GPIO_ClearValue(1, LEDS);
+	/* Turn off all LEDs off. */
+	GPIO_ClearValue(1, LED0 | LED1 | LED2 | LED3);
 }
 
 /* Turn LED on */
-__INLINE static void turnOnLED(uint32_t led) {
+void turnOnLED(uint32_t led) {
 	GPIO_SetValue(1, led);
 }
 
 /* Turn LED off */
-__INLINE static void turnOffLED(uint32_t led) {
+void turnOffLED(uint32_t led) {
 	GPIO_ClearValue(1, led);
 }
 
