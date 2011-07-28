@@ -1,10 +1,8 @@
 #include "mbed.h"
-#include "led.h"
 
 int main(void) {
 	/* Initialize the system. */
-	initSys();
-	initLED();
+	initSys(INIT_LED);
 
 	/* Alternate LEDs at 2 Hz. */
 	while (1) {

@@ -5,7 +5,7 @@
  * in the LICENSE file.
  */
 
-#include "LPC17xx.h"
+#include "mbed.h"
 
 /* Counter for milliseconds */
 volatile uint32_t msTicks;
@@ -15,17 +15,36 @@ void SysTick_Handler(void) {
 	msTicks++;
 }
 
-/* Main initialization function */
-void initSys(void) {
+/* Main initialization tion */
+void initSys(uint32_t flags) {
 	/* Update system clock register and reset counter. */
 	SystemCoreClockUpdate();
+	
+	/* Initialize global variables. */
 	msTicks = 0;
+	mbedStatus = 0x0;
 
 	/* Try to initialize the SysTick counter for 1ms interrupt. */
 	if (SysTick_Config(SystemCoreClock/1000)) {
 		/* Infinite loop on error. */
 		while (1) ;
 	}
+
+	/* Initialize periphials. */
+	if ((mbedStatus ^ MBED_LED_INIT) && (flags & INIT_LED)) {
+		initLED();
+		turnOnLED(LED0 | LED1 | LED2 | LED3);
+		wait(200);
+		turnOffLED(LED0 | LED1 | LED2 | LED3);
+		flags |= MBED_LED_INIT;
+	}
+
+	if ((mbedStatus ^ MBED_MUSB_INIT) && (flags & INIT_MUSB)) {
+		initMiniUSB(9600);
+		flags |= MBED_MUSB_INIT;
+	}
+
+	flags |= MBED_SYS_INIT;
 }
 
 /* Wait function */

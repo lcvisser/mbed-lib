@@ -9,11 +9,12 @@
 #define _MINI_USB_H
 
 #include "LPC17xx.h"
-#include "lpc17xx_gpio.h"
 #include "lpc17xx_pinsel.h"
 #include "lpc17xx_uart.h"
 
 void initMiniUSB(uint32_t);
+uint32_t miniUSBSend(uint8_t*, uint32_t);
+uint32_t miniUSBRecv(uint8_t*, uint32_t);
 
 #endif
 
