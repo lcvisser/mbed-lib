@@ -6,7 +6,6 @@
  */
 
 #include "LPC17xx.h"
-#include "lpc17xx_gpio.h"
 
 /* Counter for milliseconds */
 volatile uint32_t msTicks;

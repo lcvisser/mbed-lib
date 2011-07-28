@@ -7,7 +7,7 @@
 
 #include "mini_usb.h"
 
-void initMiniUSB(void) {
+void initMiniUSB(uint32_t baudrate) {
 	PINSEL_CFG_Type pinConfig;
 	UART_CFG_Type uartConfig;
 	UART_FIFO_CFG_Type uartFifoConfig;
@@ -24,9 +24,17 @@ void initMiniUSB(void) {
 
 	/* Initialize UART. */
 	UART_ConfigStructInit(&uartConfig);
+	uartConfig.Baud_rate = baudrate;
+	uartConfig.Parity = UART_PARITY_NONE;
+	uartConfig.Databits = UART_DATABIT_8;
+	uartConfig.Stopbits = UART_STOPBIT_1;
 	UART_Init(LPC_UART0, &uartConfig);
+
+	/* Initialize UART FIFO. */
 	UART_FIFOConfigStructInit(&uartFifoConfig);
 	UART_FIFOConfig(LPC_UART0, &uartFifoConfig);
+	
+	/* Enable transmit mode. */
 	UART_TxCmd(LPC_UART0, ENABLE);
 }
 

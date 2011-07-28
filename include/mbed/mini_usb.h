@@ -13,7 +13,7 @@
 #include "lpc17xx_pinsel.h"
 #include "lpc17xx_uart.h"
 
-void initMiniUSB(void);
+void initMiniUSB(uint32_t);
 
 #endif
 
