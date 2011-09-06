@@ -5,12 +5,18 @@
  * in the LICENSE file.
  */
 
+#include "mbed.h"
 #include "mini_usb.h"
 
 void initMiniUSB(uint32_t baudrate) {
 	PINSEL_CFG_Type pinConfig;
 	UART_CFG_Type uartConfig;
 	UART_FIFO_CFG_Type uartFifoConfig;
+
+	/* Check for initialization. */
+	if (mbedStatus & MBED_MUSB_INIT) {
+		return;
+	}
 
 	/* Configure pins. */
 	pinConfig.Funcnum = PINSEL_FUNC_1;
@@ -36,5 +42,9 @@ void initMiniUSB(uint32_t baudrate) {
 	
 	/* Enable transmit mode. */
 	UART_TxCmd(LPC_UART0, ENABLE);
+}
+
+uint32_t miniUSBSend(uint8_t* txbuf, uint32_t len) {
+	return UART_Send(LPC_UART0, txbuf, len, BLOCKING);
 }
 

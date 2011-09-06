@@ -5,10 +5,16 @@
  * in the LICENSE file.
  */
 
+#include "mbed.h"
 #include "led.h"
 
 /* LED initialization function */
 void initLED(void) {
+	/* Check for initialization. */
+	if (mbedStatus & MBED_LED_INIT) {
+		return;
+	}
+
 	/* Enable bits corresponding to LEDs as outputs. */
 	GPIO_SetDir(1, LED0 | LED1 | LED2 | LED3, 1);
 

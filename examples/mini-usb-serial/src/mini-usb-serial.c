@@ -2,8 +2,6 @@
 
 #include "mbed.h"
 
-extern uint32_t msTicks;
-
 /* Main function */
 int main(void) {
 	char greeting[] = "Hello World!\r\n";
@@ -12,10 +10,10 @@ int main(void) {
 	initSys(INIT_LED | INIT_MUSB);
 	
 	while (1) {
-		turnOnLED(LED3);
-		UART_Send(LPC_UART0, (uint8_t *)greeting, strlen(greeting), BLOCKING);
+		turnOnLED(LED0);
+		miniUSBSend((uint8_t *)greeting, strlen(greeting));
 		wait(200);
-		turnOffLED(LED3);
+		turnOffLED(LED0);
 		wait(800);
 	}
 
