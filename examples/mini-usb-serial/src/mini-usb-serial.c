@@ -10,10 +10,10 @@ int main(void) {
 	initSys(INIT_LED | INIT_MUSB);
 	
 	while (1) {
-		turnOnLED(LED0);
+		ledOn(LED0);
 		miniUSBSend((uint8_t *)greeting, strlen(greeting));
 		wait(200);
-		turnOffLED(LED0);
+		ledOff(LED0);
 		wait(800);
 	}
 

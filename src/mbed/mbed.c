@@ -33,9 +33,9 @@ void initSys(uint32_t flags) {
 	/* Initialize periphials. */
 	if ((mbedStatus ^ MBED_LED_INIT) && (flags & INIT_LED)) {
 		initLED();
-		turnOnLED(LED0 | LED1 | LED2 | LED3);
+		ledOn(LED0 | LED1 | LED2 | LED3);
 		wait(200);
-		turnOffLED(LED0 | LED1 | LED2 | LED3);
+		ledOff(LED0 | LED1 | LED2 | LED3);
 		flags |= MBED_LED_INIT;
 	}
 

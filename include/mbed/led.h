@@ -17,8 +17,9 @@
 #define LED3	(1 << 23)
 
 void initLED(void);
-void turnOnLED(uint32_t);
-void turnOffLED(uint32_t);
+void ledOn(uint32_t);
+void ledOff(uint32_t);
+void ledToggle(uint32_t);
 
 #endif
 

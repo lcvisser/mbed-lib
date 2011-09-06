@@ -23,13 +23,17 @@ void initLED(void) {
 }
 
 /* Turn LED on */
-void turnOnLED(uint32_t led) {
+void ledOn(uint32_t led) {
 	GPIO_SetValue(1, led);
 }
 
 /* Turn LED off */
-void turnOffLED(uint32_t led) {
+void ledOff(uint32_t led) {
 	GPIO_ClearValue(1, led);
 }
 
+/* Toggle LED */
+void ledToggle(uint32_t led) {
+	/* TODO */
+}
 
