@@ -25,7 +25,7 @@ uint32_t mbedStatus;
 
 void SysTick_Handler(void);
 void initSys(uint32_t);
-void wait(uint32_t);
+void delay(uint32_t);
 
 #endif
 

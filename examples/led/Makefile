@@ -3,27 +3,25 @@ PROJECT = mbed_led
 
 # Directory structure
 SOURCEDIRS = src
-INCLUDEDIRS = include ../../include ../../include/lpc17xx ../../include/lpc17xx/device ../../include/lpc17xx/drivers ../../include/mbed
+INCLUDEDIRS = include
 BUILDDIR = build
 OUTDIR = bin
 
 #  Compiler/Assembler/Linker/etc.
 GCC = arm-none-eabi-gcc
-AS = arm-none-eabi-as
-LD = arm-none-eabi-ld
 LDSCRIPT = ../../lpc17xx/ldscript_rom_gnu.ld
 OBJCOPY = arm-none-eabi-objcopy
-SIZE = arm-none-eabi-size
 MKDIR = mkdir
 RM = rm -f
 
 #  Compiler and linker flags
 CFLAGS = -Wall -mcpu=cortex-m3 -mthumb -mfloat-abi=softfp -O2
 CFLAGS += -ffunction-sections -fdata-sections -D__RAM_MODE__=0
+CFLAGS += -I../../include/lpc17xx/device -I../../include/lpc17xx/drivers -I../../include/mbed
 CFLAGS += $(foreach DIR, $(INCLUDEDIRS), -I$(DIR))
 LDFLAGS = -mcpu=cortex-m3 -mthumb -O2 -nostartfiles
 LDFLAGS += -Wl,--gc-sections,-Map=$(BUILDDIR)/$(PROJECT).map -T$(LDSCRIPT)
-LDLIBS = -L../../lib -lmbed -lm -lc -lgcc 
+LDLIBS = -L../../lib -lc -lgcc -lm -lmbed 
 ASFLAGS = -mcpu=cortex-m3 --defsym RAM_MODE=0
 
 # Source and object files

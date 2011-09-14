@@ -15,7 +15,7 @@ void SysTick_Handler(void) {
 	msTicks++;
 }
 
-/* Main initialization tion */
+/* Main initialization */
 void initSys(uint32_t flags) {
 	/* Update system clock register and reset counter. */
 	SystemCoreClockUpdate();
@@ -34,7 +34,7 @@ void initSys(uint32_t flags) {
 	if ((mbedStatus ^ MBED_LED_INIT) && (flags & INIT_LED)) {
 		initLED();
 		ledOn(LED0 | LED1 | LED2 | LED3);
-		wait(200);
+		delay(200);
 		ledOff(LED0 | LED1 | LED2 | LED3);
 		flags |= MBED_LED_INIT;
 	}
@@ -47,8 +47,8 @@ void initSys(uint32_t flags) {
 	flags |= MBED_SYS_INIT;
 }
 
-/* Wait function */
-void wait(uint32_t msecs) {
+/* Delay function */
+void delay(uint32_t msecs) {
 	uint32_t currTickCount = msTicks;
 
 	/* Loop until desired delay is achieved. */

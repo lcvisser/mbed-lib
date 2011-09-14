@@ -1,4 +1,37 @@
-21c21
+19d18
+< /*ENTRY(_start)*/
+21d19
 < GROUP(-lgcc -lc -lcs3 -lcs3unhosted -lcs3micro)
+27,29d24
+<   
+<   ram1(rwx) : ORIGIN = 0x2007C000, LENGTH = 16k
+<   ram2(rwx) : ORIGIN = 0x20080000, LENGTH = 16k
+135a131
+>   	_data = .;
+147a145,146
+>     . = ALIGN (8);
+>     __bss_start__ = .;
+150a150
+>     __bss_end__ = .;
+152a153
+>     end = .;
+156,161c157
+<   /* This used for USB RAM section */
+< 	.usb_ram (NOLOAD):
+< 	{
+< 		*.o (USB_RAM)
+< 	} > ram2
+<   .heap (NOLOAD) :
 ---
-> /*GROUP(-lgcc -lc -lcs3 -lcs3unhosted -lcs3micro)*/
+>   .heap :
+165c161
+<   .stack (__cs3_stack - __cs3_stack_size) (NOLOAD):
+---
+>   .stack (__cs3_stack - __cs3_stack_size) :
+168,169d163
+<     _estack = .;
+<     PROVIDE(estack = .);
+171d164
+< 
+177d169
+< 

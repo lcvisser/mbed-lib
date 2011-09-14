@@ -12,9 +12,9 @@ int main(void) {
 	while (1) {
 		ledOn(LED0);
 		miniUSBSend((uint8_t *)greeting, strlen(greeting));
-		wait(200);
+		delay(200);
 		ledOff(LED0);
-		wait(800);
+		delay(800);
 	}
 
 	return 0;

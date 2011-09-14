@@ -123,7 +123,7 @@ __cs3_interrupt_vector_cortex_m:
     .type   __cs3_reset_cortex_m, %function
 __cs3_reset_cortex_m:
     .fnstart
-.if (RAM_MODE)
+.if (0) /*(RAM_MODE)*/
 /* Clear .bss section (Zero init) */
 	MOV     R0, #0
 	LDR     R1, =__bss_start__
@@ -142,10 +142,44 @@ BSSIsEmpty:
     LDR     R0,=main
     BX      R0
 .else
-    LDR     R0, =SystemInit
-    BLX     R0
-	LDR     R0,=main
-    BX      R0
+
+@  Relocate .data section (Copy from ROM to RAM)
+                LDR     R1, =_etext
+                LDR     R2, =_data
+                LDR     R3, =_edata
+LoopRel:        CMP     R2, R3
+                BEQ     DataIsEmpty
+                LDR   R0, [R1]
+                STR   R0, [R2]
+				ADD	R1,#4
+				ADD R2,#4
+                B     LoopRel
+
+DataIsEmpty:
+@  Clear .bss section (Zero init)
+                MOV     R0, #0 
+                LDR     R1, =__bss_start__
+                LDR     R2, =__bss_end__
+LoopZI:         CMP     R1, R2
+                BEQ     BSSIsEmpty
+                STR	    R0, [R1]
+				ADD		R1,#4
+                B     LoopZI
+BSSIsEmpty:
+@  Enter the C code
+@                IMPORT  __main
+@                LDR     R0, =__main
+                .extern main
+@Setup stack pointer
+                LDR     R0, =__cs3_stack
+                MOV SP,R0
+@Call SystemInit
+                LDR     R0, =SystemInit
+                BLX     R0
+@Jump to main
+                LDR R0, =main
+                BX      R0
+
 .endif
     .pool
     .cantunwind

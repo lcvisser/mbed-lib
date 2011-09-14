@@ -8,11 +8,11 @@ int main(void) {
 	while (1) {
 		ledOn(LED0 | LED2);
 		ledOff(LED1 | LED3);
-		wait(250);
+		delay(250);
 
 		ledOn(LED1 | LED3);
 		ledOff(LED0 | LED2);
-		wait(250);
+		delay(250);
 	}
 	
 	return 0;
