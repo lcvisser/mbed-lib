@@ -1,4 +1,4 @@
-/* Copyright (c) 2011 Ludo Visser
+/* Copyright (c) Ludo Visser
  *
  * This file is part of the mbed-lib project, and is distributed under the
  * terms of the MIT License. The full license agreement text can be found
