@@ -7,9 +7,6 @@
 
 #include "mbed.h"
 
-/* Counter for milliseconds */
-volatile uint32_t msTicks;
-
 /* Handler for SysTick interrupt */
 void SysTick_Handler(void) {
 	msTicks++;

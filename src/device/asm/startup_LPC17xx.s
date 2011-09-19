@@ -140,7 +140,7 @@ BSSIsEmpty:
     LDR     R0, =SystemInit
     BLX     R0
     LDR     R0,=main
-    BX      R0
+    BX     R0
 .else
 
 @  Relocate .data section (Copy from ROM to RAM)

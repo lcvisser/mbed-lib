@@ -21,8 +21,13 @@
 #define MBED_LED_INIT		(1 << 1)
 #define MBED_MUSB_INIT		(1 << 2)
 
-uint32_t mbedStatus;
+/* Counter for milliseconds */
+volatile uint32_t msTicks;
 
+/* Global status flags */
+volatile uint32_t mbedStatus;
+
+/* Utility functions */
 void SysTick_Handler(void);
 void initSys(uint32_t);
 void delay(uint32_t);
