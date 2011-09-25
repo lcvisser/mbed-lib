@@ -14,7 +14,7 @@ void initMiniUSB(uint32_t baudrate) {
 	UART_FIFO_CFG_Type uartFifoConfig;
 
 	/* Check for initialization. */
-	if (mbedStatus & MBED_MUSB_INIT) {
+	if ( mbedStatus & MBED_MUSB_INIT ) {
 		return;
 	}
 
@@ -42,6 +42,9 @@ void initMiniUSB(uint32_t baudrate) {
 	
 	/* Enable transmit mode. */
 	UART_TxCmd(LPC_UART0, ENABLE);
+
+	/* Update status flags. */
+	mbedStatus |= MBED_MUSB_INIT;
 }
 
 uint32_t miniUSBSend(uint8_t* txbuf, uint32_t len) {

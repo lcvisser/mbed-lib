@@ -1,5 +1,8 @@
+These are some open issues, in arbitrary order:
 * Use hardware timer registers instead of interrupt driven timer.
 * Have _sbrk also check for stack collision.
+* Make baudrates programmable
+* Implement CAN2B and RTR
 * Write a configuration script to setup Makefiles.
 * Expand Makefile to build examples.
 

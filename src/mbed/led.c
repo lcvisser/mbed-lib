@@ -20,6 +20,9 @@ void initLED(void) {
 
 	/* Turn off all LEDs. */
 	GPIO_ClearValue(1, LED0 | LED1 | LED2 | LED3);
+
+	/* Update status flags. */
+	mbedStatus |= MBED_LED_INIT;
 }
 
 /* Turn LED on */

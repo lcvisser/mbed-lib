@@ -5,6 +5,10 @@
  * in the LICENSE file.
  */
 
+#ifndef _MINI_USB_BAUDRATE
+#define _MINI_USB_BAUDRATE	9600
+#endif
+
 #ifndef _MINI_USB_H
 #define _MINI_USB_H
 
