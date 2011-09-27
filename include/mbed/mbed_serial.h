@@ -17,8 +17,8 @@
 #define _SERIAL2_BAUDRATE	9600
 #endif
 
-#ifndef _SERIAL_H
-#define _SERIAL_H
+#ifndef _MBED_SERIAL_H
+#define _MBED_SERIAL_H
 
 #include "LPC17xx.h"
 #include "lpc17xx_pinsel.h"

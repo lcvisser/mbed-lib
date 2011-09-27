@@ -6,7 +6,6 @@
  */
 
 #include "mbed.h"
-#include "can.h"
 
 void initCAN(uint8_t portNo, uint32_t baudrate) {
 	PINSEL_CFG_Type pinConfig;

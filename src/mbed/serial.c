@@ -6,7 +6,6 @@
  */
 
 #include "mbed.h"
-#include "serial.h"
 
 void initSerial(uint8_t portNo, uint32_t baudrate) {
 	PINSEL_CFG_Type pinConfig;
@@ -110,7 +109,7 @@ void initSerial(uint8_t portNo, uint32_t baudrate) {
 			
 			break;
 		default:
-			return;
+			break;
 	}
 }
 

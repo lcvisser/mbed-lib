@@ -6,7 +6,6 @@
  */
 
 #include "mbed.h"
-#include "led.h"
 
 /* LED initialization function */
 void initLED(void) {

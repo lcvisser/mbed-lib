@@ -35,8 +35,8 @@
 #define CAN_NMT_START		1
 #define CAN_NMT_STOP		2
 
-#ifndef _CAN_H
-#define _CAN_H
+#ifndef _MBED_CAN_H
+#define _MBED_CAN_H
 
 #include "LPC17xx.h"
 #include "lpc17xx_can.h"

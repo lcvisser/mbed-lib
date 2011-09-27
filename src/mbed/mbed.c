@@ -7,27 +7,39 @@
 
 #include "mbed.h"
 
-/* Handler for SysTick interrupt */
-void SysTick_Handler(void) {
-	msTicks++;
-}
-
 /* Main initialization */
 void initSys(uint32_t flags) {
 	/* Update system clock register and reset counter. */
 	SystemCoreClockUpdate();
 	
 	/* Initialize global variables. */
-	msTicks = 0;
+	//msTicks = 0;
 	mbedStatus = 0x0;
 
 	/* Try to initialize the SysTick counter for 1ms interrupt. */
-	if ( SysTick_Config(SystemCoreClock/1000) ) {
+	//if ( SysTick_Config(SystemCoreClock/1000) ) {
 		/* Infinite loop on error. */
-		while (1) ;
+	//	while (1) ;
+	//}
+
+	/* Intialize timers. */
+	if ( (mbedStatus ^ MBED_TIMER0_INIT) && (flags & INIT_TIMER0) ) {
+		initTimer(MBED_TIMER0, _TIMER0_PS);
 	}
 
-	/* Initialize periphials. */
+	if ( (mbedStatus ^ MBED_TIMER1_INIT) && (flags & INIT_TIMER1) ) {
+		initTimer(MBED_TIMER1, _TIMER1_PS);
+	}
+
+	if ( (mbedStatus ^ MBED_TIMER2_INIT) && (flags & INIT_TIMER2) ) {
+		initTimer(MBED_TIMER2, _TIMER2_PS);
+	}
+
+	if ( (mbedStatus ^ MBED_TIMER3_INIT) && (flags & INIT_TIMER3) ) {
+		initTimer(MBED_TIMER3, _TIMER3_PS);
+	}
+
+	/* Initialize peripherals. */
 	if ( (mbedStatus ^ MBED_MUSB_INIT) && (flags & INIT_MUSB) ) {
 		initMiniUSB(_MINI_USB_BAUDRATE);
 	}
@@ -54,19 +66,13 @@ void initSys(uint32_t flags) {
 
 	if ( (mbedStatus ^ MBED_LED_INIT) && (flags & INIT_LED) ) {
 		initLED();
-		ledOn(LED0 | LED1 | LED2 | LED3);
-		delay(200);
-		ledOff(LED0 | LED1 | LED2 | LED3);
+		if ( mbedStatus & MBED_TIMER0_INIT ) {
+			ledOn(LED0 | LED1 | LED2 | LED3);
+			delay(MBED_TIMER0, 200);
+			ledOff(LED0 | LED1 | LED2 | LED3);
+		}
 	}
 
 	mbedStatus |= MBED_SYS_INIT;
-}
-
-/* Delay function */
-void delay(uint32_t msecs) {
-	uint32_t currTickCount = msTicks;
-
-	/* Loop until desired delay is achieved. */
-	while ( (msTicks - currTickCount) < msecs ) ;
 }
 

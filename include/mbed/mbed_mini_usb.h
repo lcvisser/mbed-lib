@@ -6,11 +6,11 @@
  */
 
 #ifndef _MINI_USB_BAUDRATE
-#define _MINI_USB_BAUDRATE	9600
+#define _MINI_USB_BAUDRATE	115200
 #endif
 
-#ifndef _MINI_USB_H
-#define _MINI_USB_H
+#ifndef _MBEDMINI_USB_H
+#define _MBED_MINI_USB_H
 
 #include "LPC17xx.h"
 #include "lpc17xx_pinsel.h"

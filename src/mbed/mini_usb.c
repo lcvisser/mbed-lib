@@ -6,7 +6,6 @@
  */
 
 #include "mbed.h"
-#include "mini_usb.h"
 
 void initMiniUSB(uint32_t baudrate) {
 	PINSEL_CFG_Type pinConfig;

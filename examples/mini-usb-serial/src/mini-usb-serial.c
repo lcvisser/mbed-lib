@@ -7,14 +7,14 @@ int main(void) {
 	char greeting[] = "Hello World!\r\n";
 
 	/* Initialize the system. */
-	initSys(INIT_LED | INIT_MUSB);
+	initSys(INIT_LED | INIT_MUSB | INIT_TIMER0);
 	
 	while (1) {
 		ledOn(LED0);
 		miniUSBSend((uint8_t *)greeting, strlen(greeting));
-		delay(200);
+		delay(MBED_TIMER0, 500);
 		ledOff(LED0);
-		delay(800);
+		delay(MBED_TIMER0, 500);
 	}
 
 	return 0;
