@@ -21,11 +21,11 @@
 #define _TIMER3_PS	1000
 #endif
 
-#ifndef _MBED_TIMER_H
-#define _MBED_TIMER_H
-
 #include "LPC17xx.h"
 #include "lpc17xx_timer.h"
+
+#ifndef _MBED_TIMER_H
+#define _MBED_TIMER_H
 
 void initTimer(uint8_t, uint32_t);
 void startTimer(uint8_t);

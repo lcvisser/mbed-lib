@@ -9,10 +9,26 @@
 
 /* LED initialization function */
 void initLED(void) {
+	PINSEL_CFG_Type pinConfig;
+
 	/* Check for initialization. */
 	if (mbedStatus & MBED_LED_INIT) {
 		return;
 	}
+
+	/* Configure pins */
+	pinConfig.OpenDrain = PINSEL_PINMODE_NORMAL;
+	pinConfig.Pinmode = PINSEL_PINMODE_PULLUP;
+	pinConfig.Funcnum = PINSEL_FUNC_0;
+	pinConfig.Portnum = PINSEL_PORT_1;
+	pinConfig.Pinnum = 18;		// LED 0
+	PINSEL_ConfigPin(&pinConfig);
+	pinConfig.Pinnum = 20;		// LED 1
+	PINSEL_ConfigPin(&pinConfig);
+	pinConfig.Pinnum = 21;		// LED 2
+	PINSEL_ConfigPin(&pinConfig);
+	pinConfig.Pinnum = 23;		// LED 3
+	PINSEL_ConfigPin(&pinConfig);
 
 	/* Enable bits corresponding to LEDs as outputs. */
 	GPIO_SetDir(1, LED0 | LED1 | LED2 | LED3, 1);

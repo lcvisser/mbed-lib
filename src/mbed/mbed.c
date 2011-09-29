@@ -13,14 +13,7 @@ void initSys(uint32_t flags) {
 	SystemCoreClockUpdate();
 	
 	/* Initialize global variables. */
-	//msTicks = 0;
 	mbedStatus = 0x0;
-
-	/* Try to initialize the SysTick counter for 1ms interrupt. */
-	//if ( SysTick_Config(SystemCoreClock/1000) ) {
-		/* Infinite loop on error. */
-	//	while (1) ;
-	//}
 
 	/* Intialize timers. */
 	if ( (mbedStatus ^ MBED_TIMER0_INIT) && (flags & INIT_TIMER0) ) {
@@ -72,6 +65,16 @@ void initSys(uint32_t flags) {
 			ledOff(LED0 | LED1 | LED2 | LED3);
 		}
 	}
+
+	/* Configure GPIO. */
+	if ( (mbedStatus ^ MBED_GPI_INIT) && (flags & INIT_GPI) ) {
+		initGPInputs();
+	}
+
+	if ( (mbedStatus ^ MBED_GPO_INIT) && (flags & INIT_GPO) ) {
+		initGPOutputs();
+	}
+
 
 	mbedStatus |= MBED_SYS_INIT;
 }

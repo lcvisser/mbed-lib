@@ -9,12 +9,12 @@
 #define _MINI_USB_BAUDRATE	115200
 #endif
 
-#ifndef _MBED_MINI_USB_H
-#define _MBED_MINI_USB_H
-
 #include "LPC17xx.h"
 #include "lpc17xx_pinsel.h"
 #include "lpc17xx_uart.h"
+
+#ifndef _MBED_MINI_USB_H
+#define _MBED_MINI_USB_H
 
 void initMiniUSB(uint32_t);
 uint32_t miniUSBSend(uint8_t*, uint32_t);
