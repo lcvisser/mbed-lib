@@ -1,9 +1,11 @@
-These are some open issues, in arbitrary order:
+Missing functionality:
 * DOCUMENTATION! (Doxygen?)
-* Have _sbrk also check for stack collision.
+* AD Converter on DIP 15-20
+* SERIAL on DIP 17/18
+
+Desired features:
+* Have _sbrk also check for stack collision
 * Make baudrates programmable
 * Implement CAN2B and RTR
-* Write a configuration script to setup Makefiles.
-* Expand Makefile to build examples.
-* SERIAL on DIP 17/18?
-* Check for GPIO configuration conflicts
+* Write a configuration script to setup Makefiles
+* Expand Makefile to build examples
