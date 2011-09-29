@@ -16,6 +16,7 @@ void initGPInputs() {
 		return;
 	}
 
+	checkConflicts();
 	initGPIO(INIT_GPI, mbedGPInputCfg);
 
 	/* Update status flags. */
@@ -28,10 +29,53 @@ void initGPOutputs() {
 		return;
 	}
 
+	checkConflicts();
 	initGPIO(INIT_GPO, mbedGPOutputCfg);
 
 	/* Update status flags. */
 	mbedStatus |= MBED_GPO_INIT;		
+}
+
+void checkConflicts() {
+	/* DIP 9/10 conflicts with CAN0 */
+	if (mbedStatus & MBED_CAN0_INIT) {
+		mbedGPInputCfg &= (~MBED_GPIO9);
+		mbedGPInputCfg &= (~MBED_GPIO10);
+		mbedGPOutputCfg &= (~MBED_GPIO9);
+		mbedGPOutputCfg &= (~MBED_GPIO10);
+	}
+
+	/* DIP 29/30 conflicts with CAN1 */
+	if (mbedStatus & MBED_CAN1_INIT) {
+		mbedGPInputCfg &= (~MBED_GPIO29);
+		mbedGPInputCfg &= (~MBED_GPIO30);
+		mbedGPOutputCfg &= (~MBED_GPIO29);
+		mbedGPOutputCfg &= (~MBED_GPIO30);
+	}
+
+	/* DIP 13/14 conflicts with SERIAL0 */
+	if (mbedStatus & MBED_SERIAL0_INIT) {
+		mbedGPInputCfg &= (~MBED_GPIO13);
+		mbedGPInputCfg &= (~MBED_GPIO14);
+		mbedGPOutputCfg &= (~MBED_GPIO13);
+		mbedGPOutputCfg &= (~MBED_GPIO14);
+	}
+
+	/* DIP 27/128 conflicts with SERIAL1 */
+	if (mbedStatus & MBED_SERIAL1_INIT) {
+		mbedGPInputCfg &= (~MBED_GPIO27);
+		mbedGPInputCfg &= (~MBED_GPIO28);
+		mbedGPOutputCfg &= (~MBED_GPIO27);
+		mbedGPOutputCfg &= (~MBED_GPIO28);
+	}
+
+	/* DIP 9/10 conflicts with SERIAL2 */
+	if (mbedStatus & MBED_SERIAL2_INIT) {
+		mbedGPInputCfg &= (~MBED_GPIO9);
+		mbedGPInputCfg &= (~MBED_GPIO10);
+		mbedGPOutputCfg &= (~MBED_GPIO9);
+		mbedGPOutputCfg &= (~MBED_GPIO10);
+	}
 }
 
 void initGPIO(uint32_t mode, uint32_t gpioConfig) {

@@ -75,7 +75,6 @@ void initSys(uint32_t flags) {
 		initGPOutputs();
 	}
 
-
 	mbedStatus |= MBED_SYS_INIT;
 }
 

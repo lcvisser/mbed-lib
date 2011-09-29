@@ -48,6 +48,7 @@ uint32_t mbedGPOutputCfg;
 
 void initGPInputs(void);
 void initGPOutputs(void);
+void checkConflicts(void);
 void initGPIO(uint32_t, uint32_t);
 void GPIOSetVal(uint32_t, uint8_t);
 uint8_t GPIOReadVal(uint32_t);
