@@ -54,3 +54,7 @@ uint32_t miniUSBRecv(uint8_t* rxbuf, uint32_t len) {
 	return UART_Receive(LPC_UART0, rxbuf, len, NONE_BLOCKING);
 }
 
+uint32_t miniUSBRecvReady(void) {
+	return UART_GetLineStatus(LPC_UART0) & UART_LINESTAT_RDR;
+}
+

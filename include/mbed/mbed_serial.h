@@ -27,6 +27,7 @@
 void initSerial(uint8_t, uint32_t);
 uint32_t serialSend(uint8_t, uint8_t*, uint32_t);
 uint32_t serialRecv(uint8_t, uint8_t*, uint32_t);
+uint32_t recvReady(uint8_t);
 
 #endif
 

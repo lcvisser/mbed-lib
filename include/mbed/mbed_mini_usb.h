@@ -19,6 +19,7 @@
 void initMiniUSB(uint32_t);
 uint32_t miniUSBSend(uint8_t*, uint32_t);
 uint32_t miniUSBRecv(uint8_t*, uint32_t);
+uint32_t miniUSBRecvReady(void);
 
 #endif
 

@@ -153,3 +153,23 @@ uint32_t serialRecv(uint8_t portNo, uint8_t* rxbuf, uint32_t len) {
 	return r;
 }
 
+uint32_t recvReady(uint8_t portNo) {
+	uint32_t r = 0;
+
+	switch (portNo) {
+		case MBED_SERIAL0:
+			r =  (UART_GetLineStatus((LPC_UART_TypeDef*)LPC_UART1) & UART_LINESTAT_RDR);
+			break;
+		case MBED_SERIAL1:
+			r =  (UART_GetLineStatus(LPC_UART2) & UART_LINESTAT_RDR);
+			break;
+		case MBED_SERIAL2:
+			r =  (UART_GetLineStatus(LPC_UART3) & UART_LINESTAT_RDR);
+			break;
+		default:
+			break;
+	}
+
+	return r;
+}
+
