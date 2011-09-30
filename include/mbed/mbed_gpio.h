@@ -43,9 +43,11 @@
 #define GP_ERR	2	/* Pin is not configured */
 
 /* GPIO configuration */
-uint32_t mbedGPInputCfg;
-uint32_t mbedGPOutputCfg;
+uint32_t _mbedGPICfg;
+uint32_t _mbedGPOCfg;
 
+void setGPInputCfg(uint32_t);
+void setGPOutputCfg(uint32_t);
 void initGPInputs(void);
 void initGPOutputs(void);
 void checkConflicts(void);

@@ -7,8 +7,16 @@
 
 #include "mbed.h"
 
-extern uint32_t mbedGPInputCfg;
-extern uint32_t mbedGPOutputCfg;
+extern uint32_t _mbedGPICfg;
+extern uint32_t _mbedGPOCfg;
+
+void setGPInputCfg(uint32_t config) {
+	_mbedGPICfg = config;
+}
+
+void setGPOutputCfg(uint32_t config) {
+	_mbedGPOCfg = config;
+}
 
 void initGPInputs() {
 	/* Check for initialization. */
@@ -17,7 +25,7 @@ void initGPInputs() {
 	}
 
 	checkConflicts();
-	initGPIO(INIT_GPI, mbedGPInputCfg);
+	initGPIO(INIT_GPI, _mbedGPICfg);
 
 	/* Update status flags. */
 	mbedStatus |= MBED_GPI_INIT;			
@@ -30,7 +38,7 @@ void initGPOutputs() {
 	}
 
 	checkConflicts();
-	initGPIO(INIT_GPO, mbedGPOutputCfg);
+	initGPIO(INIT_GPO, _mbedGPOCfg);
 
 	/* Update status flags. */
 	mbedStatus |= MBED_GPO_INIT;		
@@ -39,42 +47,42 @@ void initGPOutputs() {
 void checkConflicts() {
 	/* DIP 9/10 conflicts with CAN0 */
 	if (mbedStatus & MBED_CAN0_INIT) {
-		mbedGPInputCfg &= (~MBED_GPIO9);
-		mbedGPInputCfg &= (~MBED_GPIO10);
-		mbedGPOutputCfg &= (~MBED_GPIO9);
-		mbedGPOutputCfg &= (~MBED_GPIO10);
+		_mbedGPICfg &= (~MBED_GPIO9);
+		_mbedGPICfg &= (~MBED_GPIO10);
+		_mbedGPOCfg &= (~MBED_GPIO9);
+		_mbedGPOCfg &= (~MBED_GPIO10);
 	}
 
 	/* DIP 29/30 conflicts with CAN1 */
 	if (mbedStatus & MBED_CAN1_INIT) {
-		mbedGPInputCfg &= (~MBED_GPIO29);
-		mbedGPInputCfg &= (~MBED_GPIO30);
-		mbedGPOutputCfg &= (~MBED_GPIO29);
-		mbedGPOutputCfg &= (~MBED_GPIO30);
+		_mbedGPICfg &= (~MBED_GPIO29);
+		_mbedGPICfg &= (~MBED_GPIO30);
+		_mbedGPOCfg &= (~MBED_GPIO29);
+		_mbedGPOCfg &= (~MBED_GPIO30);
 	}
 
 	/* DIP 13/14 conflicts with SERIAL0 */
 	if (mbedStatus & MBED_SERIAL0_INIT) {
-		mbedGPInputCfg &= (~MBED_GPIO13);
-		mbedGPInputCfg &= (~MBED_GPIO14);
-		mbedGPOutputCfg &= (~MBED_GPIO13);
-		mbedGPOutputCfg &= (~MBED_GPIO14);
+		_mbedGPICfg &= (~MBED_GPIO13);
+		_mbedGPICfg &= (~MBED_GPIO14);
+		_mbedGPOCfg &= (~MBED_GPIO13);
+		_mbedGPOCfg &= (~MBED_GPIO14);
 	}
 
 	/* DIP 27/128 conflicts with SERIAL1 */
 	if (mbedStatus & MBED_SERIAL1_INIT) {
-		mbedGPInputCfg &= (~MBED_GPIO27);
-		mbedGPInputCfg &= (~MBED_GPIO28);
-		mbedGPOutputCfg &= (~MBED_GPIO27);
-		mbedGPOutputCfg &= (~MBED_GPIO28);
+		_mbedGPICfg &= (~MBED_GPIO27);
+		_mbedGPICfg &= (~MBED_GPIO28);
+		_mbedGPOCfg &= (~MBED_GPIO27);
+		_mbedGPOCfg &= (~MBED_GPIO28);
 	}
 
 	/* DIP 9/10 conflicts with SERIAL2 */
 	if (mbedStatus & MBED_SERIAL2_INIT) {
-		mbedGPInputCfg &= (~MBED_GPIO9);
-		mbedGPInputCfg &= (~MBED_GPIO10);
-		mbedGPOutputCfg &= (~MBED_GPIO9);
-		mbedGPOutputCfg &= (~MBED_GPIO10);
+		_mbedGPICfg &= (~MBED_GPIO9);
+		_mbedGPICfg &= (~MBED_GPIO10);
+		_mbedGPOCfg &= (~MBED_GPIO9);
+		_mbedGPOCfg &= (~MBED_GPIO10);
 	}
 }
 
@@ -286,7 +294,7 @@ void GPIOSetVal(uint32_t pin, uint8_t val) {
 	uint8_t portNo;
 	uint32_t pinNo;
 
-	if (mbedGPOutputCfg & pin) {
+	if (_mbedGPOCfg & pin) {
 		if (MBED_GPIO_P0 & pin) {
 			portNo = 0;
 		} else if (MBED_GPIO_P1 & pin) {
@@ -339,7 +347,7 @@ uint8_t GPIOReadVal(uint32_t pin) {
 	uint8_t portNo;
 	uint32_t pinNo;
 
-	if (mbedGPInputCfg & pin) {
+	if (_mbedGPICfg & pin) {
 		if (MBED_GPIO_P0 & pin) {
 			portNo = 0;
 		} else if (MBED_GPIO_P1 & pin) {
