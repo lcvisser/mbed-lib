@@ -1,7 +1,10 @@
 Missing functionality:
-* DOCUMENTATION! (Doxygen?)
+* DOCUMENTATION! (Doxygen)
 * AD Converter on DIP 15-20
+* DA Converter on DIP 18
+* PWM outputs on DIP 21-26
 * SERIAL on DIP 17/18
+* I2C, SPI, Ethernet, USB
 
 Desired features:
 * Have _sbrk also check for stack collision
