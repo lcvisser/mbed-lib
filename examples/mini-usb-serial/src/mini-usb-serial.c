@@ -11,7 +11,7 @@ int main(void) {
 	
 	while (1) {
 		ledOn(LED0);
-		miniUSBSend((uint8_t *)greeting, strlen(greeting));
+		miniUSBSend((uint8_t*)greeting, strlen(greeting));
 		delay(MBED_TIMER0, 500);
 		ledOff(LED0);
 		delay(MBED_TIMER0, 500);

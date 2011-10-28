@@ -1,0 +1,2 @@
+Single-precision floating point support seems to be a bit broken, either due to a bug in gcc/newlib or due to a bug in the Cortex-M3. Either way, since double-precision floating point support appears to be working fine, this small example shows how to convert from single precision floating point to double precision floating point.
+Consult documentation on the IEEE 754-1985 standard for more information.

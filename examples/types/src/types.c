@@ -18,7 +18,7 @@ int main(void) {
 	
 	/* Greeting message */
 	snprintf(txbuf, BUFSIZE, "\r\nCortex-M3 data type information\r\n");
-	miniUSBSend((uint8_t *)txbuf, strlen(txbuf));
+	miniUSBSend((uint8_t*)txbuf, strlen(txbuf));
 
 	/* Run tests */
 	sizes();
