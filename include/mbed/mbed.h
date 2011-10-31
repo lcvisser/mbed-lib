@@ -5,6 +5,14 @@
  * in the LICENSE file.
  */
 
+/*!
+ * \file
+ *
+ * In this file are all necessary defines for the mbed platform. Also, all
+ * all header files are included here for convience, so that including this
+ * header file is sufficient.
+ */
+
 #include "LPC17xx.h"
 #include "mbed_can.h"
 #include "mbed_gpio.h"
@@ -13,20 +21,20 @@
 #include "mbed_serial.h"
 #include "mbed_timer.h"
 
-/* Initializer flags */
-#define INIT_LED	(1 << 1)	/* Initialize the four blue LEDs. */
-#define INIT_MUSB	(1 << 2)	/* Serial on mini USB-B port (UART0). */
-#define INIT_SERIAL0	(1 << 3)	/* Serial on DIP 13/14 (UART1). */
-#define INIT_SERIAL1	(1 << 4)	/* Serial on DIP 27/28 (UART2). */
-#define INIT_SERIAL2	(1 << 5)	/* Serial on DIP 9/10 (UART3). */
-#define INIT_CAN0	(1 << 6)	/* CAN on DIP 9/10 (CAN1). */
-#define INIT_CAN1	(1 << 7)	/* CAN on DIP 29/30 (CAN2). */
-#define INIT_TIMER0	(1 << 8)	/* Initialize TIMER0. */
-#define INIT_TIMER1	(1 << 9)	/* Initialize TIMER1. */
-#define INIT_TIMER2	(1 << 10)	/* Initialize TIMER2. */
-#define INIT_TIMER3	(1 << 11)	/* Initialize TIMER3. */
-#define INIT_GPI	(1 << 12)	/* Initialize general purpose input ports. */
-#define INIT_GPO	(1 << 13)	/* Initialize general purpose output ports. */
+/* Initialization flags */
+#define INIT_LED	(1 << 1)	/*!< Initialize the four blue LEDs. */
+#define INIT_MUSB	(1 << 2)	/*!< Serial on mini USB-B port (UART0). */
+#define INIT_SERIAL0	(1 << 3)	/*!< Serial on DIP 13/14 (UART1). */
+#define INIT_SERIAL1	(1 << 4)	/*!< Serial on DIP 27/28 (UART2). */
+#define INIT_SERIAL2	(1 << 5)	/*!< Serial on DIP 9/10 (UART3). */
+#define INIT_CAN0	(1 << 6)	/*!< CAN on DIP 9/10 (CAN1). */
+#define INIT_CAN1	(1 << 7)	/*!< CAN on DIP 29/30 (CAN2). */
+#define INIT_TIMER0	(1 << 8)	/*!< Initialize TIMER0. */
+#define INIT_TIMER1	(1 << 9)	/*!< Initialize TIMER1. */
+#define INIT_TIMER2	(1 << 10)	/*!< Initialize TIMER2. */
+#define INIT_TIMER3	(1 << 11)	/*!< Initialize TIMER3. */
+#define INIT_GPI	(1 << 12)	/*!< Initialize general purpose input ports. */
+#define INIT_GPO	(1 << 13)	/*!< Initialize general purpose output ports. */
 
 /* Status flags */
 #define MBED_SYS_INIT		(1 << 0)

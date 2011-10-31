@@ -15,14 +15,13 @@ MKDIR = mkdir
 RM = rm -f
 
 #  Compiler and linker flags
-CFLAGS = -Wall -mcpu=cortex-m3 -mthumb -mfloat-abi=softfp -O2
+CFLAGS = -Wall -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -O2
 CFLAGS += -ffunction-sections -fdata-sections -D__RAM_MODE__=0
 CFLAGS += -I../../include/lpc17xx/device -I../../include/lpc17xx/drivers -I../../include/mbed
 CFLAGS += $(foreach DIR, $(INCLUDEDIRS), -I$(DIR))
-LDFLAGS = -mcpu=cortex-m3 -mthumb -O2 -nostartfiles
+LDFLAGS = -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -O2 -nostartfiles
 LDFLAGS += -Wl,--gc-sections,-Map=$(BUILDDIR)/$(PROJECT).map -T$(LDSCRIPT)
 LDLIBS = -L../../lib -lc -lgcc -lm -lmbed 
-ASFLAGS = -mcpu=cortex-m3 --defsym RAM_MODE=0
 
 # Source and object files
 CFILES = $(foreach DIR, $(SOURCEDIRS), $(wildcard $(DIR)/*.c))

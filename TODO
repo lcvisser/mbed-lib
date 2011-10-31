@@ -1,5 +1,4 @@
 Missing functionality:
-* DOCUMENTATION! (Doxygen)
 * AD Converter on DIP 15-20
 * DA Converter on DIP 18
 * PWM outputs on DIP 21-26
@@ -11,4 +10,3 @@ Desired features:
 * Make baudrates programmable
 * Implement CAN2B and RTR
 * Write a configuration script to setup Makefiles
-* Expand Makefile to build examples
