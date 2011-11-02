@@ -9,6 +9,12 @@
 #define _MINI_USB_BAUDRATE	115200
 #endif
 
+#define TXBUFSIZE		1024
+
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "LPC17xx.h"
 #include "lpc17xx_pinsel.h"
 #include "lpc17xx_uart.h"
@@ -20,6 +26,7 @@ void initMiniUSB(uint32_t);
 uint32_t miniUSBSend(uint8_t*, uint32_t);
 uint32_t miniUSBRecv(uint8_t*, uint32_t);
 uint32_t miniUSBRecvReady(void);
+uint32_t miniUSBPrint(const char*, ...);
 
 #endif
 

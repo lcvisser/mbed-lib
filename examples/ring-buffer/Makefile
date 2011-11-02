@@ -1,5 +1,5 @@
 #  Project Name
-PROJECT = mbed_led
+PROJECT = mbed_ring-buffer
 
 # Directory structure
 SOURCEDIRS = src

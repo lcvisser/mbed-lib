@@ -58,3 +58,14 @@ uint32_t miniUSBRecvReady(void) {
 	return UART_GetLineStatus(LPC_UART0) & UART_LINESTAT_RDR;
 }
 
+uint32_t miniUSBPrint(const char* format, ...) {
+	char txbuf[TXBUFSIZE] = {'\0'};
+	va_list args;
+
+	va_start(args, format);
+	vsnprintf(txbuf, TXBUFSIZE, format, args);
+	va_end(args);
+
+	return miniUSBSend((uint8_t*)txbuf, (uint32_t)strlen(txbuf));
+}
+	

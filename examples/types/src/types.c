@@ -3,22 +3,17 @@
 
 #include "mbed.h"
 
-#define BUFSIZE	256
-
 /* Forward declarations */
 void sizes(void);
 void storage(void);
 
 /* Main function */
 int main(void) {
-	char txbuf[BUFSIZE + 1] = {'\0'};
-
 	/* Initialize the system. */
 	initSys(INIT_LED | INIT_MUSB | INIT_TIMER0);
 	
 	/* Greeting message */
-	snprintf(txbuf, BUFSIZE, "\r\nCortex-M3 data type information\r\n");
-	miniUSBSend((uint8_t*)txbuf, strlen(txbuf));
+	miniUSBPrint("\r\nCortex-M3 data type information\r\n");
 
 	/* Run tests */
 	sizes();

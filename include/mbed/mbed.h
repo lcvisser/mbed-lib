@@ -17,7 +17,7 @@
 #include "mbed_can.h"
 #include "mbed_gpio.h"
 #include "mbed_led.h"
-#include "mbed_mini_usb.h"
+#include "mbed_musb.h"
 #include "mbed_serial.h"
 #include "mbed_timer.h"
 

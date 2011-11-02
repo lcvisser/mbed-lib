@@ -20,7 +20,7 @@ CFLAGS += -ffunction-sections -fdata-sections -D__RAM_MODE__=0
 CFLAGS += -I../../include/lpc17xx/device -I../../include/lpc17xx/drivers -I../../include/mbed
 CFLAGS += $(foreach DIR, $(INCLUDEDIRS), -I$(DIR))
 LDFLAGS = -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -O2 -nostartfiles
-LDFLAGS += -Wl,--gc-sections,-Map=$(BUILDDIR)/$(PROJECT).map -T$(LDSCRIPT)
+LDFLAGS += -Wl,--gc-sections,-Map=$(BUILDDIR)/$(PROJECT).map -T$(LDSCRIPT) -u _sbrk
 LDLIBS = -L../../lib -lc -lgcc -lm -lmbed 
 
 # Source and object files

@@ -3,13 +3,13 @@ MAKE = make
 RM = rm -f
 
 # List of exampels to be built
-EXAMPLES = mini-usb-serial led types
+EXAMPLES = mini-usb-serial led ring-buffer types
 
-# Example dependency
+# Examples targets
 EXDIRS = $(EXAMPLES:%=ex-%)
 CLEANDIRS = $(EXAMPLES:%=clean-%)
 
-# Targets
+# Build rules
 .PHONY: all clean
 
 all: $(EXDIRS)
