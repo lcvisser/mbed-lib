@@ -3,78 +3,83 @@
 
 #include "mbed.h"
 
-#define RBSIZE		100
+#define RBSIZE		10
 
-volatile int buffer[RBSIZE];
-volatile int* readPtr;
-volatile int* writePtr;
+unsigned char buffer[RBSIZE];
+unsigned char* readPtr;
+unsigned char* writePtr;
 
-int readValue() {
-	int value;
+/* Pointer increment function */
+unsigned char* increment(unsigned char* const ptr) {
+	unsigned char* inc = NULL;
+
+	/* Check if we are at the end of the buffer */
+	if ( ptr == &buffer[RBSIZE - 1] ) {
+		inc = &buffer[0];
+	} else {
+		inc = ptr + sizeof(unsigned char);
+	}
+	return inc;
+}
+
+/* Read function */
+unsigned char readValue() {
+	unsigned char value;
 
 	if ( readPtr == writePtr ) {
 		// Buffer is empty
-		return -1;
+		return '0';
 	} else {
 		value = *readPtr;
-		if ( readPtr == &buffer[RBSIZE - 1] ) {
-			readPtr = &buffer[0];
-		} else {
-			readPtr++;
-		}
+		readPtr = increment(readPtr);
 
 		return value;
 	}
 }
 
-void writeValue(void) {
-	*writePtr *= 2;;
-
-	if ( writePtr == &buffer[RBSIZE - 1] ) {
-		writePtr = &buffer[0];
+/* Write function */
+void writeValue(unsigned char c) {
+	if ( increment(writePtr) == readPtr) {
+		// Buffer is full
 	} else {
-		writePtr++;
+		*writePtr = c;
+		writePtr = increment(writePtr);
 	}
 }
 
-/* SysTick interrupt handler */
-void SysTick_Handler(void) {
+/* UART0 interrupt handler */
+void UART0_IRQHandler(void) {
 	/* Disable interrupt */
-	__disable_irq();
+	NVIC_DisableIRQ(UART0_IRQn);
 
-	writeValue();
+	ledOn(LED1);
+	while (UART_GetLineStatus(LPC_UART0) & UART_LINESTAT_RDR) {
+		writeValue((unsigned char)UART_ReceiveByte(LPC_UART0));
+	}
+	delay(MBED_TIMER0, 50);
+	ledOff(LED1);
 
 	/* Enable interrupt */
-	__enable_irq();
+	NVIC_EnableIRQ(UART0_IRQn);
 }
 
 /* Main function */
 int main(void) {
-	int i = 0;
+	unsigned char c = '0';
 
 	/* Initialize the system */
 	setMiniUSBBaudrate(9600);
 	setTimerPrescale(MBED_TIMER0, 1000);
 	initSys(INIT_LED | INIT_MUSB | INIT_TIMER0);
 
+	memset((void*)buffer, '0', RBSIZE);
 	readPtr = &buffer[0];
-	writePtr = &buffer[4];
+	writePtr = &buffer[0];
 
-	/* Initialize the SysTick counter to 0.1 sec intervals */
-	if ( SysTick_Config(SystemCoreClock/10) ) {
-		/* Error, loop forever */
-		while (1) {
-			ledOn(LED0 | LED1 | LED2 | LED3);
-			delay(MBED_TIMER0, 100);
-			ledOff(LED0 | LED1 | LED2 | LED3);
-			delay(MBED_TIMER0, 100);
-		}
-	}
-
-	/* Fill buffer */
-	for ( i = 0; i < RBSIZE; i++) {
-		buffer[i] = i;
-	}
+	/* Enable interrupt */
+	UART_IntConfig(LPC_UART0, UART_INTCFG_RBR, ENABLE);
+	UART_IntConfig(LPC_UART0, UART_INTCFG_RLS, ENABLE);
+	NVIC_EnableIRQ(UART0_IRQn);
 
 	/* Greeting message */
 	miniUSBPrint("\r\nRing buffer example\r\n");
@@ -82,20 +87,17 @@ int main(void) {
 	/* Loop forever */
 	while (1) {
 		ledOn(LED0);
-		delay(MBED_TIMER0, 250);
+		delay(MBED_TIMER0, 2500);
 
-		i = readValue();
-		if (i >= 0) {
-			miniUSBPrint("Reading buffer:\r\n");
-		}
-
-		while (i >= 0) {
-			miniUSBPrint("Value: %i\r\n", i);
-			i = readValue();
+		miniUSBPrint("Reading buffer:\r\n");
+		c = readValue();
+		while (c != '0') {
+			miniUSBPrint("Value: %c\r\n", c);
+			c = readValue();
 		}
 
 		ledOff(LED0);
-		delay(MBED_TIMER0, 250);
+		delay(MBED_TIMER0, 2500);
 	}
 
 	return 0;

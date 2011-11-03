@@ -49,12 +49,18 @@ void initCAN(uint8_t portNo) {
 			CAN_ModeConfig(LPC_CAN1, CAN_SELFTEST_MODE, ENABLE);
 			CAN_SetAFMode(LPC_CANAF, CAN_AccBP);
 
+			/* Enable receive and transmit interrupts */
+			CAN_IRQCmd(LPC_CAN1, CANINT_RIE);	/* Receive */
+			CAN_IRQCmd(LPC_CAN1, CANINT_TIE1);	/* Transmit 1 */
+			CAN_IRQCmd(LPC_CAN1, CANINT_TIE2);	/* Transmit 2 */
+			CAN_IRQCmd(LPC_CAN1, CANINT_TIE3);	/* Transmit 3 */
+
 			/* Update status flags. */
 			mbedStatus |= MBED_CAN0_INIT;
 
 			break;
 		case MBED_CAN1:
-			/* Check for initializatio. */
+			/* Check for initialization. */
 			if ( mbedStatus & MBED_CAN1_INIT ) {
 				return;
 			}
@@ -71,6 +77,12 @@ void initCAN(uint8_t portNo) {
 			CAN_ModeConfig(LPC_CAN2, CAN_SELFTEST_MODE, ENABLE);
 			CAN_SetAFMode(LPC_CANAF, CAN_AccBP);
 
+			/* Enable receive and transmit interrupts */
+			CAN_IRQCmd(LPC_CAN2, CANINT_RIE);	/* Receive */
+			CAN_IRQCmd(LPC_CAN2, CANINT_TIE1);	/* Transmit 1 */
+			CAN_IRQCmd(LPC_CAN2, CANINT_TIE2);	/* Transmit 2 */
+			CAN_IRQCmd(LPC_CAN2, CANINT_TIE3);	/* Transmit 3 */
+
 			/* Update status flags. */
 			mbedStatus |= MBED_CAN1_INIT;
 
@@ -78,7 +90,13 @@ void initCAN(uint8_t portNo) {
 		default:
 			return;
 	}
-	
+}
+
+void CAN_IRQHandler(void) {
+	__disable_irq();
+
+
+	__enable_irq();
 }
 
 uint8_t CANOpenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t len, uint8_t* data) {
