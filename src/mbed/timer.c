@@ -7,12 +7,36 @@
 
 #include "mbed.h"
 
-void initTimer(uint8_t timerID, uint32_t usScaling) {
+/* Prescaling values in microseconds */
+volatile static uint32_t _timerPS0;
+volatile static uint32_t _timerPS1;
+volatile static uint32_t _timerPS2;
+volatile static uint32_t _timerPS3;
+
+void setTimerPrescale(uint8_t timerID, uint32_t usScaling) {
+	switch (timerID) {
+		case MBED_TIMER0:
+			_timerPS0 = usScaling;
+			break;
+		case MBED_TIMER1:
+			_timerPS1 = usScaling;
+			break;
+		case MBED_TIMER2:
+			_timerPS2 = usScaling;
+			break;
+		case MBED_TIMER3:
+			_timerPS3 = usScaling;
+			break;
+		default:
+			break;
+	}
+}
+
+void initTimer(uint8_t timerID) {
 	TIM_TIMERCFG_Type timerConfig;
 
 	/* Set timer configuration options. */
 	timerConfig.PrescaleOption = TIM_PRESCALE_USVAL;
-	timerConfig.PrescaleValue = usScaling;
 
 	/* Initialize timer. */
 	switch (timerID) {
@@ -22,6 +46,7 @@ void initTimer(uint8_t timerID, uint32_t usScaling) {
 				return;
 			}
 
+			timerConfig.PrescaleValue = _timerPS0;
 			TIM_Init(LPC_TIM0, TIM_TIMER_MODE, &timerConfig);
 			startTimer(MBED_TIMER0);
 			
@@ -34,6 +59,7 @@ void initTimer(uint8_t timerID, uint32_t usScaling) {
 				return;
 			}
 
+			timerConfig.PrescaleValue = _timerPS1;
 			TIM_Init(LPC_TIM1, TIM_TIMER_MODE, &timerConfig);
 			startTimer(MBED_TIMER1);
 			
@@ -46,6 +72,7 @@ void initTimer(uint8_t timerID, uint32_t usScaling) {
 				return;
 			}
 
+			timerConfig.PrescaleValue = _timerPS2;
 			TIM_Init(LPC_TIM2, TIM_TIMER_MODE, &timerConfig);
 			startTimer(MBED_TIMER2);
 			
@@ -58,6 +85,7 @@ void initTimer(uint8_t timerID, uint32_t usScaling) {
 				return;
 			}
 
+			timerConfig.PrescaleValue = _timerPS3;
 			TIM_Init(LPC_TIM3, TIM_TIMER_MODE, &timerConfig);
 			startTimer(MBED_TIMER3);
 

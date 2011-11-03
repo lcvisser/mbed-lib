@@ -5,11 +5,11 @@
  * in the LICENSE file.
  */
 
+#ifndef MBED_LED_H
+#define MBED_LED_H
+
 #include "LPC17xx.h"
 #include "lpc17xx_gpio.h"
-
-#ifndef _MBED_LED_H
-#define _MBED_LED_H
 
 #define LED0	(1 << 18)
 #define LED1	(1 << 20)

@@ -7,7 +7,24 @@
 
 #include "mbed.h"
 
-void initCAN(uint8_t portNo, uint32_t baudrate) {
+/* Baudrates */
+volatile static uint32_t _canRate0;
+volatile static uint32_t _canRate1;
+
+void setCANBaudrate(uint8_t portNo, uint32_t baudrate) {
+	switch (portNo) {
+		case MBED_CAN0:
+			_canRate0 = baudrate;
+			break;
+		case MBED_CAN1:
+			_canRate1 = baudrate;
+			break;
+		default:
+			break;
+	}
+}
+
+void initCAN(uint8_t portNo) {
 	PINSEL_CFG_Type pinConfig;
 
 	/* Configure pins. */
@@ -28,7 +45,7 @@ void initCAN(uint8_t portNo, uint32_t baudrate) {
 			PINSEL_ConfigPin(&pinConfig);
 			
 			/* Initialize CAN. */
-			CAN_Init(LPC_CAN1, baudrate);
+			CAN_Init(LPC_CAN1, _canRate0);
 			CAN_ModeConfig(LPC_CAN1, CAN_SELFTEST_MODE, ENABLE);
 			CAN_SetAFMode(LPC_CANAF, CAN_AccBP);
 
@@ -50,7 +67,7 @@ void initCAN(uint8_t portNo, uint32_t baudrate) {
 			PINSEL_ConfigPin(&pinConfig);
 
 			/* Initialize CAN. */
-			CAN_Init(LPC_CAN2, baudrate);
+			CAN_Init(LPC_CAN2, _canRate1);
 			CAN_ModeConfig(LPC_CAN2, CAN_SELFTEST_MODE, ENABLE);
 			CAN_SetAFMode(LPC_CANAF, CAN_AccBP);
 

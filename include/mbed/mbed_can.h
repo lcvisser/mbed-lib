@@ -5,13 +5,8 @@
  * in the LICENSE file.
  */
 
-#ifndef _CAN0_BAUDRATE
-#define _CAN0_BAUDRATE		500000
-#endif
-
-#ifndef _CAN1_BAUDRATE
-#define _CAN1_BAUDRATE		500000
-#endif
+#ifndef MBED_CAN_H
+#define MBED_CAN_H
 
 /* CANOpen COB Types */
 #define CAN_COB_NMT		(0 << 7)
@@ -39,10 +34,8 @@
 #include "lpc17xx_can.h"
 #include "lpc17xx_pinsel.h"
 
-#ifndef _MBED_CAN_H
-#define _MBED_CAN_H
-
-void initCAN(uint8_t, uint32_t);
+void setCANBaudrate(uint8_t, uint32_t);
+void initCAN(uint8_t);
 uint8_t CANOpenSend(uint8_t, uint8_t, uint32_t, uint8_t, uint8_t*);
 uint8_t CANOpenRecv(uint8_t, uint8_t*, uint32_t*, uint8_t*);
 

@@ -37,7 +37,7 @@ ASMOBJS = $(foreach SFILE, $(SFILES), $(BUILDDIR)/asm/$(basename $(notdir $(SFIL
 VPATH = $(foreach DIR, $(SOURCEDIRS), $(strip $(DIR)):)
 
 # Build rules
-.PHONY: all clean
+.PHONY: all clean mbed-doc mbed-examples mbed-lib
 
 all: mbed-doc mbed-examples mbed-lib
 
@@ -67,7 +67,7 @@ clean:
 
 mbed-doc:
 	$(DOXYGEN)
-	$(MAKE) -C $(DOCROOT)/latex
+	$(MAKE) -C $(DOCROOT)/latex > /dev/null
 	$(CP) $(DOCROOT)/latex/refman.pdf $(DOCROOT)/
 
 mbed-examples: mbed-lib

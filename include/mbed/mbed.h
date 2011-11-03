@@ -13,6 +13,9 @@
  * header file is sufficient.
  */
 
+#ifndef MBED_H
+#define MBED_H
+
 #include "LPC17xx.h"
 #include "mbed_can.h"
 #include "mbed_gpio.h"
@@ -97,9 +100,6 @@
 #define MBED_TIMER1	1		/* Timer 1 */
 #define MBED_TIMER2	2		/* Timer 2 */
 #define MBED_TIMER3	3		/* Timer 3 */
-
-#ifndef _MBED_H
-#define _MBED_H
 
 /* Global status flags */
 volatile uint32_t mbedStatus;

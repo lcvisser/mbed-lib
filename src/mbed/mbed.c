@@ -17,44 +17,44 @@ void initSys(uint32_t flags) {
 
 	/* Intialize timers. */
 	if ( (mbedStatus ^ MBED_TIMER0_INIT) && (flags & INIT_TIMER0) ) {
-		initTimer(MBED_TIMER0, _TIMER0_PS);
+		initTimer(MBED_TIMER0);
 	}
 
 	if ( (mbedStatus ^ MBED_TIMER1_INIT) && (flags & INIT_TIMER1) ) {
-		initTimer(MBED_TIMER1, _TIMER1_PS);
+		initTimer(MBED_TIMER1);
 	}
 
 	if ( (mbedStatus ^ MBED_TIMER2_INIT) && (flags & INIT_TIMER2) ) {
-		initTimer(MBED_TIMER2, _TIMER2_PS);
+		initTimer(MBED_TIMER2);
 	}
 
 	if ( (mbedStatus ^ MBED_TIMER3_INIT) && (flags & INIT_TIMER3) ) {
-		initTimer(MBED_TIMER3, _TIMER3_PS);
+		initTimer(MBED_TIMER3);
 	}
 
 	/* Initialize peripherals. */
 	if ( (mbedStatus ^ MBED_MUSB_INIT) && (flags & INIT_MUSB) ) {
-		initMiniUSB(_MINI_USB_BAUDRATE);
+		initMiniUSB();
 	}
 
 	if ( (mbedStatus ^ MBED_SERIAL0_INIT) && (flags & INIT_SERIAL0) ) {
-		initSerial(MBED_SERIAL0, _SERIAL0_BAUDRATE);
+		initSerial(MBED_SERIAL0);
 	}
 
 	if ( (mbedStatus ^ MBED_SERIAL1_INIT) && (flags & INIT_SERIAL1) ) {
-		initSerial(MBED_SERIAL1, _SERIAL1_BAUDRATE);
+		initSerial(MBED_SERIAL1);
 	}
 
 	if ( (mbedStatus ^ MBED_SERIAL2_INIT) && (flags & INIT_SERIAL2) ) {
-		initSerial(MBED_SERIAL2, _SERIAL2_BAUDRATE);
+		initSerial(MBED_SERIAL2);
 	}
 
 	if ( (mbedStatus ^ MBED_CAN0_INIT) && (flags & INIT_CAN0) ) {
-		initCAN(MBED_CAN0, _CAN0_BAUDRATE);
+		initCAN(MBED_CAN0);
 	}
 
 	if ( (mbedStatus ^ MBED_CAN1_INIT) && (flags & INIT_CAN1) ) {
-		initCAN(MBED_CAN1, _CAN1_BAUDRATE);
+		initCAN(MBED_CAN1);
 	}
 
 	if ( (mbedStatus ^ MBED_LED_INIT) && (flags & INIT_LED) ) {

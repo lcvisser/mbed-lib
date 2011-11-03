@@ -7,7 +7,28 @@
 
 #include "mbed.h"
 
-void initSerial(uint8_t portNo, uint32_t baudrate) {
+/* Baudrates */
+volatile static uint32_t _serialRate0;
+volatile static uint32_t _serialRate1;
+volatile static uint32_t _serialRate2;
+
+void setSerialBaudrate(uint8_t portNo, uint32_t baudrate) {
+	switch (portNo) {
+		case MBED_SERIAL0:
+			_serialRate0 = baudrate;
+			break;
+		case MBED_SERIAL1:
+			_serialRate1 = baudrate;
+			break;
+		case MBED_SERIAL2:
+			_serialRate2 = baudrate;
+			break;
+		default:
+			break;
+	}
+}
+
+void initSerial(uint8_t portNo) {
 	PINSEL_CFG_Type pinConfig;
 	UART_CFG_Type uartConfig;
 	UART_FIFO_CFG_Type uartFifoConfig;
@@ -28,6 +49,7 @@ void initSerial(uint8_t portNo, uint32_t baudrate) {
 			PINSEL_ConfigPin(&pinConfig);
 			pinConfig.Pinnum = 16;		// DIP 14
 			PINSEL_ConfigPin(&pinConfig);
+			
 			break;
 		case MBED_SERIAL1:
 			/* Check for initialization. */
@@ -41,6 +63,7 @@ void initSerial(uint8_t portNo, uint32_t baudrate) {
 			PINSEL_ConfigPin(&pinConfig);
 			pinConfig.Pinnum = 10;		// DIP 28
 			PINSEL_ConfigPin(&pinConfig);
+
 			break;
 		case MBED_SERIAL2:
 			/* Check for initialization (CAN0 and SERIAL2 share DIP 9/10). */
@@ -54,6 +77,7 @@ void initSerial(uint8_t portNo, uint32_t baudrate) {
 			PINSEL_ConfigPin(&pinConfig);
 			pinConfig.Pinnum = 1;		// DIP 10
 			PINSEL_ConfigPin(&pinConfig);
+			
 			break;
 		default:
 			return;
@@ -61,12 +85,12 @@ void initSerial(uint8_t portNo, uint32_t baudrate) {
 
 	/* Initialize UART. */
 	UART_ConfigStructInit(&uartConfig);
-	uartConfig.Baud_rate = baudrate;
 	uartConfig.Parity = UART_PARITY_NONE;
 	uartConfig.Databits = UART_DATABIT_8;
 	uartConfig.Stopbits = UART_STOPBIT_1;
 	switch (portNo) {
 		case MBED_SERIAL0:
+			uartConfig.Baud_rate = _serialRate0;
 			UART_Init((LPC_UART_TypeDef*)LPC_UART1, &uartConfig);
 			
 			/* Initialize UART FIFO. */
@@ -81,6 +105,7 @@ void initSerial(uint8_t portNo, uint32_t baudrate) {
 			
 			break;
 		case MBED_SERIAL1:
+			uartConfig.Baud_rate = _serialRate1;
 			UART_Init(LPC_UART2, &uartConfig);
 			
 			/* Initialize UART FIFO. */
@@ -95,6 +120,7 @@ void initSerial(uint8_t portNo, uint32_t baudrate) {
 			
 			break;
 		case MBED_SERIAL2:
+			uartConfig.Baud_rate = _serialRate2;
 			UART_Init(LPC_UART3, &uartConfig);
 			
 			/* Initialize UART FIFO. */

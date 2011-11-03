@@ -5,9 +5,8 @@
  * in the LICENSE file.
  */
 
-#ifndef _MINI_USB_BAUDRATE
-#define _MINI_USB_BAUDRATE	115200
-#endif
+#ifndef MBED_MINI_USB_H
+#define MBED_MINI_USB_H
 
 #define TXBUFSIZE		1024
 
@@ -19,10 +18,8 @@
 #include "lpc17xx_pinsel.h"
 #include "lpc17xx_uart.h"
 
-#ifndef _MBED_MINI_USB_H
-#define _MBED_MINI_USB_H
-
-void initMiniUSB(uint32_t);
+void setMiniUSBBaudrate(uint32_t);
+void initMiniUSB(void);;
 uint32_t miniUSBSend(uint8_t*, uint32_t);
 uint32_t miniUSBRecv(uint8_t*, uint32_t);
 uint32_t miniUSBRecvReady(void);

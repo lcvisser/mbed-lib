@@ -7,8 +7,9 @@
 
 #include "mbed.h"
 
-extern uint32_t _mbedGPICfg;
-extern uint32_t _mbedGPOCfg;
+/* GPIO configuration */
+volatile static uint32_t _mbedGPICfg;
+volatile static uint32_t _mbedGPOCfg;
 
 void setGPInputCfg(uint32_t config) {
 	_mbedGPICfg = config;

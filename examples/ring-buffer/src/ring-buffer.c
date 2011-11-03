@@ -53,6 +53,8 @@ int main(void) {
 	int i = 0;
 
 	/* Initialize the system */
+	setMiniUSBBaudrate(9600);
+	setTimerPrescale(MBED_TIMER0, 1000);
 	initSys(INIT_LED | INIT_MUSB | INIT_TIMER0);
 
 	readPtr = &buffer[0];

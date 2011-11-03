@@ -5,11 +5,11 @@
  * in the LICENSE file.
  */
 
+#ifndef MBED_GPIO_H
+#define MBED_GPIO_H
+
 #include "LPC17xx.h"
 #include "lpc17xx_gpio.h"
-
-#ifndef _MBED_GPIO_H
-#define _MBED_GPIO_H
 
 #define GPIO5	9	/* port 0 */
 #define GPIO6	8	/* port 0 */
@@ -41,10 +41,6 @@
 #define GP_LOW	0
 #define GP_HIGH	1
 #define GP_ERR	2	/* Pin is not configured */
-
-/* GPIO configuration */
-uint32_t _mbedGPICfg;
-uint32_t _mbedGPOCfg;
 
 void setGPInputCfg(uint32_t);
 void setGPOutputCfg(uint32_t);

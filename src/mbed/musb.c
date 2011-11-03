@@ -7,7 +7,14 @@
 
 #include "mbed.h"
 
-void initMiniUSB(uint32_t baudrate) {
+/* Baudrate */
+volatile static uint32_t _musbRate;
+
+void setMiniUSBBaudrate(uint32_t baudrate) {
+	_musbRate = baudrate;
+}
+
+void initMiniUSB(void) {
 	PINSEL_CFG_Type pinConfig;
 	UART_CFG_Type uartConfig;
 	UART_FIFO_CFG_Type uartFifoConfig;
@@ -29,7 +36,7 @@ void initMiniUSB(uint32_t baudrate) {
 
 	/* Initialize UART. */
 	UART_ConfigStructInit(&uartConfig);
-	uartConfig.Baud_rate = baudrate;
+	uartConfig.Baud_rate = _musbRate;
 	uartConfig.Parity = UART_PARITY_NONE;
 	uartConfig.Databits = UART_DATABIT_8;
 	uartConfig.Stopbits = UART_STOPBIT_1;
