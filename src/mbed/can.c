@@ -232,28 +232,34 @@ uint8_t CANOpenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 	
 	switch (portNo) {
 		case MBED_CAN0:
-			if (_CANBufPtrIncrement(_canTxBuf0_wp, _canTxBuf0_head, _canTxBuf0_tail) == _canTxBuf0_rp) {
-				// Buffer is full
-				r = ERROR;
-			} else {
-				NVIC_DisableIRQ(CAN_IRQn);
-				memcpy((void*)_canTxBuf0_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
-				_canTxBuf0_wp = _CANBufPtrIncrement(_canTxBuf0_wp, _canTxBuf0_head, _canTxBuf0_tail);
-				NVIC_EnableIRQ(CAN_IRQn);
-				r = SUCCESS;
+			/* Try sending message, otherwise buffer it */
+			if (CAN_SendMsg(LPC_CAN1, &msg) != SUCCESS) {
+				if (_CANBufPtrIncrement(_canTxBuf0_wp, _canTxBuf0_head, _canTxBuf0_tail) == _canTxBuf0_rp) {
+					// Buffer is full
+					r = ERROR;
+				} else {
+					NVIC_DisableIRQ(CAN_IRQn);
+					memcpy((void*)_canTxBuf0_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
+					_canTxBuf0_wp = _CANBufPtrIncrement(_canTxBuf0_wp, _canTxBuf0_head, _canTxBuf0_tail);
+					NVIC_EnableIRQ(CAN_IRQn);
+					r = SUCCESS;
+				}
 			}
 
 			break;
 		case MBED_CAN1:
-			if (_CANBufPtrIncrement(_canTxBuf1_wp, _canTxBuf1_head, _canTxBuf1_tail) == _canTxBuf1_rp) {
-				// Buffer is full
-				r = ERROR;
-			} else {
-				NVIC_DisableIRQ(CAN_IRQn);
-				memcpy((void*)_canTxBuf1_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
-				_canTxBuf1_wp = _CANBufPtrIncrement(_canTxBuf1_wp, _canTxBuf1_head, _canTxBuf1_tail);
-				NVIC_EnableIRQ(CAN_IRQn);
-				r = SUCCESS;
+			/* Try sending message, otherwise buffer it */
+			if (CAN_SendMsg(LPC_CAN2, &msg) != SUCCESS) {
+				if (_CANBufPtrIncrement(_canTxBuf1_wp, _canTxBuf1_head, _canTxBuf1_tail) == _canTxBuf1_rp) {
+					// Buffer is full
+					r = ERROR;
+				} else {
+					NVIC_DisableIRQ(CAN_IRQn);
+					memcpy((void*)_canTxBuf1_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
+					_canTxBuf1_wp = _CANBufPtrIncrement(_canTxBuf1_wp, _canTxBuf1_head, _canTxBuf1_tail);
+					NVIC_EnableIRQ(CAN_IRQn);
+					r = SUCCESS;
+				}
 			}
 
 			break;
