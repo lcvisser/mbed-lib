@@ -5,11 +5,11 @@
  * in the LICENSE file.
  */
 
-#ifndef MBED_TIMER_H
-#define MBED_TIMER_H
-
 #include "LPC17xx.h"
 #include "lpc17xx_timer.h"
+
+#ifndef MBED_TIMER_H
+#define MBED_TIMER_H
 
 void setTimerPrescale(uint8_t, uint32_t);
 void initTimer(uint8_t);

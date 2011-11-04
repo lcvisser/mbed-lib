@@ -5,12 +5,12 @@
  * in the LICENSE file.
  */
 
-#ifndef MBED_SERIAL_H
-#define MBED_SERIAL_H
-
 #include "LPC17xx.h"
 #include "lpc17xx_pinsel.h"
 #include "lpc17xx_uart.h"
+
+#ifndef MBED_SERIAL_H
+#define MBED_SERIAL_H
 
 void setSerialBaudrate(uint8_t, uint32_t);
 void initSerial(uint8_t);

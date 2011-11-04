@@ -5,6 +5,10 @@
  * in the LICENSE file.
  */
 
+#include "LPC17xx.h"
+#include "lpc17xx_can.h"
+#include "lpc17xx_pinsel.h"
+
 #ifndef MBED_CAN_H
 #define MBED_CAN_H
 
@@ -32,10 +36,6 @@
 
 /* CAN buffer size */
 #define CAN_BUFSIZE		256
-
-#include "LPC17xx.h"
-#include "lpc17xx_can.h"
-#include "lpc17xx_pinsel.h"
 
 void setCANBaudrate(uint8_t, uint32_t);
 void initCAN(uint8_t);

@@ -13,9 +13,6 @@
  * header file is sufficient.
  */
 
-#ifndef MBED_H
-#define MBED_H
-
 #include "LPC17xx.h"
 #include "mbed_can.h"
 #include "mbed_gpio.h"
@@ -23,6 +20,9 @@
 #include "mbed_musb.h"
 #include "mbed_serial.h"
 #include "mbed_timer.h"
+
+#ifndef MBED_H
+#define MBED_H
 
 /* Initialization flags */
 #define INIT_LED	(1 << 1)	/*!< Initialize the four blue LEDs. */

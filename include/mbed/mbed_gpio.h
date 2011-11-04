@@ -5,11 +5,11 @@
  * in the LICENSE file.
  */
 
-#ifndef MBED_GPIO_H
-#define MBED_GPIO_H
-
 #include "LPC17xx.h"
 #include "lpc17xx_gpio.h"
+
+#ifndef MBED_GPIO_H
+#define MBED_GPIO_H
 
 #define GPIO5	9	/* port 0 */
 #define GPIO6	8	/* port 0 */
