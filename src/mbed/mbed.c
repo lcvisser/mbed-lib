@@ -7,7 +7,11 @@
 
 #include "mbed.h"
 
-/* Main initialization */
+/*! \brief System initialization function.
+ *
+ * This function initializes the LPC1768 clock registers and any other functionality that is required.
+ * \sa initflags
+ */
 void initSys(uint32_t flags) {
 	/* Update system clock register and reset counter. */
 	SystemCoreClockUpdate();
