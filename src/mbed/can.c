@@ -5,11 +5,37 @@
  * in the LICENSE file.
  */
 
+#include <stdlib.h>
+
 #include "mbed.h"
 
 /* Baudrates */
-volatile static uint32_t _canRate0;
-volatile static uint32_t _canRate1;
+static uint32_t _canRate0;
+static uint32_t _canRate1;
+
+/* CAN0 receive buffer */
+static CAN_MSG_Type* _canRxBuf0_head;
+static CAN_MSG_Type* _canRxBuf0_tail;
+volatile static CAN_MSG_Type* _canRxBuf0_rp;
+volatile static CAN_MSG_Type* _canRxBuf0_wp;
+
+/* CAN0 transmit buffer */
+static CAN_MSG_Type* _canTxBuf0_head;
+static CAN_MSG_Type* _canTxBuf0_tail;
+volatile static CAN_MSG_Type* _canTxBuf0_rp;
+volatile static CAN_MSG_Type* _canTxBuf0_wp;
+
+/* CAN1 receive buffer */
+static CAN_MSG_Type* _canRxBuf1_head;
+static CAN_MSG_Type* _canRxBuf1_tail;
+volatile static CAN_MSG_Type* _canRxBuf1_rp;
+volatile static CAN_MSG_Type* _canRxBuf1_wp;
+
+/* CAN1 transmit buffer */
+static CAN_MSG_Type* _canTxBuf1_head;
+static CAN_MSG_Type* _canTxBuf1_tail;
+volatile static CAN_MSG_Type* _canTxBuf1_rp;
+volatile static CAN_MSG_Type* _canTxBuf1_wp;
 
 void setCANBaudrate(uint8_t portNo, uint32_t baudrate) {
 	switch (portNo) {
@@ -50,10 +76,21 @@ void initCAN(uint8_t portNo) {
 			CAN_SetAFMode(LPC_CANAF, CAN_AccBP);
 
 			/* Enable receive and transmit interrupts */
-			CAN_IRQCmd(LPC_CAN1, CANINT_RIE);	/* Receive */
-			CAN_IRQCmd(LPC_CAN1, CANINT_TIE1);	/* Transmit 1 */
-			CAN_IRQCmd(LPC_CAN1, CANINT_TIE2);	/* Transmit 2 */
-			CAN_IRQCmd(LPC_CAN1, CANINT_TIE3);	/* Transmit 3 */
+			CAN_IRQCmd(LPC_CAN1, CANINT_RIE, ENABLE);	/* Receive */
+			CAN_IRQCmd(LPC_CAN1, CANINT_TIE1, ENABLE);	/* Transmit 1 */
+			CAN_IRQCmd(LPC_CAN1, CANINT_TIE2, ENABLE);	/* Transmit 2 */
+			CAN_IRQCmd(LPC_CAN1, CANINT_TIE3, ENABLE);	/* Transmit 3 */
+
+			/* Initialize buffers */
+			_canRxBuf0_head = malloc(sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
+			_canRxBuf0_tail = &_canRxBuf0_head[CAN_BUFSIZE - 1];
+			_canRxBuf0_rp = _canRxBuf0_head;
+			_canRxBuf0_wp = _canRxBuf0_head;
+
+			_canTxBuf0_head = malloc(sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
+			_canTxBuf0_tail = &_canTxBuf0_head[CAN_BUFSIZE - 1];
+			_canTxBuf0_rp = _canTxBuf0_head;
+			_canTxBuf0_wp = _canTxBuf0_head;
 
 			/* Update status flags. */
 			mbedStatus |= MBED_CAN0_INIT;
@@ -78,10 +115,21 @@ void initCAN(uint8_t portNo) {
 			CAN_SetAFMode(LPC_CANAF, CAN_AccBP);
 
 			/* Enable receive and transmit interrupts */
-			CAN_IRQCmd(LPC_CAN2, CANINT_RIE);	/* Receive */
-			CAN_IRQCmd(LPC_CAN2, CANINT_TIE1);	/* Transmit 1 */
-			CAN_IRQCmd(LPC_CAN2, CANINT_TIE2);	/* Transmit 2 */
-			CAN_IRQCmd(LPC_CAN2, CANINT_TIE3);	/* Transmit 3 */
+			CAN_IRQCmd(LPC_CAN2, CANINT_RIE, ENABLE);	/* Receive */
+			CAN_IRQCmd(LPC_CAN2, CANINT_TIE1, ENABLE);	/* Transmit 1 */
+			CAN_IRQCmd(LPC_CAN2, CANINT_TIE2, ENABLE);	/* Transmit 2 */
+			CAN_IRQCmd(LPC_CAN2, CANINT_TIE3, ENABLE);	/* Transmit 3 */
+
+			/* Initialize buffers */
+			_canRxBuf1_head = malloc(sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
+			_canRxBuf1_tail = &_canRxBuf1_head[CAN_BUFSIZE - 1];
+			_canRxBuf1_rp = _canRxBuf1_head;
+			_canRxBuf1_wp = _canRxBuf1_head;
+
+			_canTxBuf1_head = malloc(sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
+			_canTxBuf1_tail = &_canTxBuf1_head[CAN_BUFSIZE - 1];
+			_canTxBuf1_rp = _canTxBuf1_head;
+			_canTxBuf1_wp = _canTxBuf1_head;
 
 			/* Update status flags. */
 			mbedStatus |= MBED_CAN1_INIT;
@@ -90,13 +138,67 @@ void initCAN(uint8_t portNo) {
 		default:
 			return;
 	}
+
+	/* Enable interrupts */
+	NVIC_EnableIRQ(CAN_IRQn);
 }
 
-void CAN_IRQHandler(void) {
-	__disable_irq();
+uint8_t CANOpenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t* data) {
+	CAN_MSG_Type msg;
+	uint8_t i = 0;
+	uint8_t r = 0;
 
+	switch (portNo) {
+		case MBED_CAN0:
+			if (_canRxBuf0_rp == _canRxBuf0_wp) {
+				// Buffer is empty
+				r = ERROR;
+			} else {
+				NVIC_DisableIRQ(CAN_IRQn);
+				memcpy((void*)&msg, (const void*)_canRxBuf0_rp, sizeof(CAN_MSG_Type));
+				increment(_canRxBuf0_rp, _canRxBuf0_head, _canRxBuf0_tail);
+				NVIC_EnableIRQ(CAN_IRQn);
+				r = SUCCESS;
+			}
 
-	__enable_irq();
+			break;
+		case MBED_CAN1:
+			if (_canRxBuf1_rp == _canRxBuf1_wp) {
+				// Buffer is empty
+				r = ERROR;
+			} else {
+				NVIC_DisableIRQ(CAN_IRQn);
+				memcpy((void*)&msg, (const void*)_canRxBuf1_rp, sizeof(CAN_MSG_Type));
+				increment(_canRxBuf1_rp, _canRxBuf1_head, _canRxBuf1_tail);
+				NVIC_EnableIRQ(CAN_IRQn);
+				r = SUCCESS;
+			}
+
+			break;
+		default:
+			r = ERROR;
+			break;
+	}
+
+	if ( r == SUCCESS ) {
+		/* Process message */
+		*nodeID = msg.id & 0x7f;
+		*cobType = msg.id & (~0x7f);
+		if ( msg.len <= 4 ) {
+			for (i = 0; i < msg.len; i++) {
+				data[i] = msg.dataA[i];
+			}
+		} else {
+			for (i = 0; i < 4; i++) {
+				data[i] = msg.dataA[i];
+				data[i + 4] = msg.dataB[i];
+			}
+		}
+
+		return 0;
+	} else {
+		return 1;
+	}
 }
 
 uint8_t CANOpenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t len, uint8_t* data) {
@@ -128,10 +230,30 @@ uint8_t CANOpenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 	
 	switch (portNo) {
 		case MBED_CAN0:
-			r = CAN_SendMsg(LPC_CAN1, &msg);
+			if (increment(_canTxBuf0_wp, _canTxBuf0_head, _canTxBuf0_tail) == _canTxBuf0_rp) {
+				// Buffer is full
+				r = ERROR;
+			} else {
+				NVIC_DisableIRQ(CAN_IRQn);
+				memcpy((void*)_canTxBuf0_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
+				increment(_canTxBuf0_wp, _canTxBuf0_head, _canTxBuf0_tail);
+				NVIC_EnableIRQ(CAN_IRQn);
+				r = SUCCESS;
+			}
+
 			break;
 		case MBED_CAN1:
-			r = CAN_SendMsg(LPC_CAN2, &msg);
+			if (increment(_canTxBuf1_wp, _canTxBuf1_head, _canTxBuf1_tail) == _canTxBuf1_rp) {
+				// Buffer is full
+				r = ERROR;
+			} else {
+				NVIC_DisableIRQ(CAN_IRQn);
+				memcpy((void*)_canTxBuf1_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
+				increment(_canTxBuf1_wp, _canTxBuf1_head, _canTxBuf1_tail);
+				NVIC_EnableIRQ(CAN_IRQn);
+				r = SUCCESS;
+			}
+
 			break;
 		default:
 			r = ERROR;
@@ -145,41 +267,45 @@ uint8_t CANOpenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 	}
 }
 
-uint8_t CANOpenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t* data) {
+void CAN_IRQHandler(void) {
 	CAN_MSG_Type msg;
-	uint8_t i = 0;
-	uint8_t r = 0;
+	uint32_t icrCAN0 = CAN_IntGetStatus(LPC_CAN1);
+	uint32_t icrCAN1 = CAN_IntGetStatus(LPC_CAN2);
 
-	switch (portNo) {
-		case MBED_CAN0:
-			r = CAN_ReceiveMsg(LPC_CAN1, &msg);
-			break;
-		case MBED_CAN1:
-			r = CAN_ReceiveMsg(LPC_CAN2, &msg);
-			break;
-		default:
-			r = ERROR;
-			break;
+	/* Check if a message is received. */
+	if (icrCAN0 & (1 << 0) ) {
+		// Read message
+		NVIC_DisableIRQ(CAN_IRQn);
+		CAN_ReceiveMsg(LPC_CAN1, &msg);
+		memcpy((void*)_canRxBuf0_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
+		increment(_canRxBuf0_wp, _canRxBuf0_head, _canRxBuf0_tail);
+		NVIC_EnableIRQ(CAN_IRQn);
 	}
-
-	if ( r == SUCCESS ) {
-		/* Process message */
-		*nodeID = msg.id & 0x7f;
-		*cobType = msg.id & (~0x7f);
-		if ( msg.len <= 4 ) {
-			for (i = 0; i < msg.len; i++) {
-				data[i] = msg.dataA[i];
-			}
-		} else {
-			for (i = 0; i < 4; i++) {
-				data[i] = msg.dataA[i];
-				data[i + 4] = msg.dataB[i];
-			}
-		}
-
-		return 0;
-	} else {
-		return 1;
+	if (icrCAN1 & (1 << 0) ) {
+		// Read message
+		NVIC_DisableIRQ(CAN_IRQn);
+		CAN_ReceiveMsg(LPC_CAN2, &msg);
+		memcpy((void*)_canRxBuf1_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
+		increment(_canRxBuf1_wp, _canRxBuf1_head, _canRxBuf1_tail);
+		NVIC_EnableIRQ(CAN_IRQn);
+	}
+	
+	/* Check if a message is sent. */
+	if ( icrCAN0 & ((1 << 1) | (1 << 9) | (1 << 10)) ) {
+		// At least 1 tx buffer is available, send message
+		NVIC_DisableIRQ(CAN_IRQn);
+		memcpy((void*)&msg, (const void*)_canTxBuf0_rp, sizeof(CAN_MSG_Type));
+		increment(_canTxBuf0_rp, _canTxBuf0_head, _canTxBuf0_tail);
+		CAN_SendMsg(LPC_CAN1, &msg);
+		NVIC_EnableIRQ(CAN_IRQn);
+	}
+	if ( icrCAN1 & ((1 << 1) | (1 << 9) | (1 << 10)) ) {
+		// At least 1 tx buffer is available, send message
+		NVIC_DisableIRQ(CAN_IRQn);
+		memcpy((void*)&msg, (const void*)_canTxBuf1_rp, sizeof(CAN_MSG_Type));
+		increment(_canTxBuf1_rp, _canTxBuf1_head, _canTxBuf1_tail);
+		CAN_SendMsg(LPC_CAN1, &msg);
+		NVIC_EnableIRQ(CAN_IRQn);
 	}
 }
 

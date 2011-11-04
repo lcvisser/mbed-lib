@@ -30,14 +30,30 @@
 #define CAN_NMT_START		1
 #define CAN_NMT_STOP		2
 
+/* CAN buffer size */
+#define CAN_BUFSIZE		256
+
 #include "LPC17xx.h"
 #include "lpc17xx_can.h"
 #include "lpc17xx_pinsel.h"
 
 void setCANBaudrate(uint8_t, uint32_t);
 void initCAN(uint8_t);
-uint8_t CANOpenSend(uint8_t, uint8_t, uint32_t, uint8_t, uint8_t*);
 uint8_t CANOpenRecv(uint8_t, uint8_t*, uint32_t*, uint8_t*);
+uint8_t CANOpenSend(uint8_t, uint8_t, uint32_t, uint8_t, uint8_t*);
+void CAN_IRQHandler(void);
+
+inline CAN_MSG_Type* increment(volatile CAN_MSG_Type* const p, CAN_MSG_Type* const head, CAN_MSG_Type* const tail) {
+	CAN_MSG_Type* np = NULL;
+
+	if (p == tail) {
+		np = head;
+	} else {
+		np = (CAN_MSG_Type*)p + sizeof(CAN_MSG_Type);
+	}
+
+	return np;
+}
 
 #endif
 

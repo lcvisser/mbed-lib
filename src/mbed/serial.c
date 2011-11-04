@@ -8,9 +8,9 @@
 #include "mbed.h"
 
 /* Baudrates */
-volatile static uint32_t _serialRate0;
-volatile static uint32_t _serialRate1;
-volatile static uint32_t _serialRate2;
+static uint32_t _serialRate0;
+static uint32_t _serialRate1;
+static uint32_t _serialRate2;
 
 void setSerialBaudrate(uint8_t portNo, uint32_t baudrate) {
 	switch (portNo) {

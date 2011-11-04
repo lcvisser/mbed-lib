@@ -8,10 +8,10 @@
 #include "mbed.h"
 
 /* Prescaling values in microseconds */
-volatile static uint32_t _timerPS0;
-volatile static uint32_t _timerPS1;
-volatile static uint32_t _timerPS2;
-volatile static uint32_t _timerPS3;
+static uint32_t _timerPS0;
+static uint32_t _timerPS1;
+static uint32_t _timerPS2;
+static uint32_t _timerPS3;
 
 void setTimerPrescale(uint8_t timerID, uint32_t usScaling) {
 	switch (timerID) {

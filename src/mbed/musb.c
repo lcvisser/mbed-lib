@@ -8,7 +8,7 @@
 #include "mbed.h"
 
 /* Baudrate */
-volatile static uint32_t _musbRate;
+static uint32_t _musbRate;
 
 void setMiniUSBBaudrate(uint32_t baudrate) {
 	_musbRate = baudrate;
