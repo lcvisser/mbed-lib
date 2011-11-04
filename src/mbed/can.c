@@ -37,6 +37,8 @@ static CAN_MSG_Type* _canTxBuf1_tail;
 volatile static CAN_MSG_Type* _canTxBuf1_rp;
 volatile static CAN_MSG_Type* _canTxBuf1_wp;
 
+static CAN_MSG_Type* _CANBufPtrIncrement(volatile CAN_MSG_Type* const, CAN_MSG_Type* const, CAN_MSG_Type* const);
+
 void setCANBaudrate(uint8_t portNo, uint32_t baudrate) {
 	switch (portNo) {
 		case MBED_CAN0:
@@ -156,7 +158,7 @@ uint8_t CANOpenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 			} else {
 				NVIC_DisableIRQ(CAN_IRQn);
 				memcpy((void*)&msg, (const void*)_canRxBuf0_rp, sizeof(CAN_MSG_Type));
-				increment(_canRxBuf0_rp, _canRxBuf0_head, _canRxBuf0_tail);
+				_canRxBuf0_rp = _CANBufPtrIncrement(_canRxBuf0_rp, _canRxBuf0_head, _canRxBuf0_tail);
 				NVIC_EnableIRQ(CAN_IRQn);
 				r = SUCCESS;
 			}
@@ -169,7 +171,7 @@ uint8_t CANOpenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 			} else {
 				NVIC_DisableIRQ(CAN_IRQn);
 				memcpy((void*)&msg, (const void*)_canRxBuf1_rp, sizeof(CAN_MSG_Type));
-				increment(_canRxBuf1_rp, _canRxBuf1_head, _canRxBuf1_tail);
+				_canRxBuf1_rp = _CANBufPtrIncrement(_canRxBuf1_rp, _canRxBuf1_head, _canRxBuf1_tail);
 				NVIC_EnableIRQ(CAN_IRQn);
 				r = SUCCESS;
 			}
@@ -230,26 +232,26 @@ uint8_t CANOpenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 	
 	switch (portNo) {
 		case MBED_CAN0:
-			if (increment(_canTxBuf0_wp, _canTxBuf0_head, _canTxBuf0_tail) == _canTxBuf0_rp) {
+			if (_CANBufPtrIncrement(_canTxBuf0_wp, _canTxBuf0_head, _canTxBuf0_tail) == _canTxBuf0_rp) {
 				// Buffer is full
 				r = ERROR;
 			} else {
 				NVIC_DisableIRQ(CAN_IRQn);
 				memcpy((void*)_canTxBuf0_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
-				increment(_canTxBuf0_wp, _canTxBuf0_head, _canTxBuf0_tail);
+				_canTxBuf0_wp = _CANBufPtrIncrement(_canTxBuf0_wp, _canTxBuf0_head, _canTxBuf0_tail);
 				NVIC_EnableIRQ(CAN_IRQn);
 				r = SUCCESS;
 			}
 
 			break;
 		case MBED_CAN1:
-			if (increment(_canTxBuf1_wp, _canTxBuf1_head, _canTxBuf1_tail) == _canTxBuf1_rp) {
+			if (_CANBufPtrIncrement(_canTxBuf1_wp, _canTxBuf1_head, _canTxBuf1_tail) == _canTxBuf1_rp) {
 				// Buffer is full
 				r = ERROR;
 			} else {
 				NVIC_DisableIRQ(CAN_IRQn);
 				memcpy((void*)_canTxBuf1_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
-				increment(_canTxBuf1_wp, _canTxBuf1_head, _canTxBuf1_tail);
+				_canTxBuf1_wp = _CANBufPtrIncrement(_canTxBuf1_wp, _canTxBuf1_head, _canTxBuf1_tail);
 				NVIC_EnableIRQ(CAN_IRQn);
 				r = SUCCESS;
 			}
@@ -278,7 +280,7 @@ void CAN_IRQHandler(void) {
 		NVIC_DisableIRQ(CAN_IRQn);
 		CAN_ReceiveMsg(LPC_CAN1, &msg);
 		memcpy((void*)_canRxBuf0_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
-		increment(_canRxBuf0_wp, _canRxBuf0_head, _canRxBuf0_tail);
+		_canRxBuf0_wp = _CANBufPtrIncrement(_canRxBuf0_wp, _canRxBuf0_head, _canRxBuf0_tail);
 		NVIC_EnableIRQ(CAN_IRQn);
 	}
 	if (icrCAN1 & (1 << 0) ) {
@@ -286,7 +288,7 @@ void CAN_IRQHandler(void) {
 		NVIC_DisableIRQ(CAN_IRQn);
 		CAN_ReceiveMsg(LPC_CAN2, &msg);
 		memcpy((void*)_canRxBuf1_wp, (const void*)&msg, sizeof(CAN_MSG_Type));
-		increment(_canRxBuf1_wp, _canRxBuf1_head, _canRxBuf1_tail);
+		_canRxBuf1_wp = _CANBufPtrIncrement(_canRxBuf1_wp, _canRxBuf1_head, _canRxBuf1_tail);
 		NVIC_EnableIRQ(CAN_IRQn);
 	}
 	
@@ -295,7 +297,7 @@ void CAN_IRQHandler(void) {
 		// At least 1 tx buffer is available, send message
 		NVIC_DisableIRQ(CAN_IRQn);
 		memcpy((void*)&msg, (const void*)_canTxBuf0_rp, sizeof(CAN_MSG_Type));
-		increment(_canTxBuf0_rp, _canTxBuf0_head, _canTxBuf0_tail);
+		_canTxBuf0_rp = _CANBufPtrIncrement(_canTxBuf0_rp, _canTxBuf0_head, _canTxBuf0_tail);
 		CAN_SendMsg(LPC_CAN1, &msg);
 		NVIC_EnableIRQ(CAN_IRQn);
 	}
@@ -303,9 +305,20 @@ void CAN_IRQHandler(void) {
 		// At least 1 tx buffer is available, send message
 		NVIC_DisableIRQ(CAN_IRQn);
 		memcpy((void*)&msg, (const void*)_canTxBuf1_rp, sizeof(CAN_MSG_Type));
-		increment(_canTxBuf1_rp, _canTxBuf1_head, _canTxBuf1_tail);
+		_canTxBuf1_rp = _CANBufPtrIncrement(_canTxBuf1_rp, _canTxBuf1_head, _canTxBuf1_tail);
 		CAN_SendMsg(LPC_CAN1, &msg);
 		NVIC_EnableIRQ(CAN_IRQn);
 	}
 }
 
+static CAN_MSG_Type* _CANBufPtrIncrement(volatile CAN_MSG_Type* const p, CAN_MSG_Type* const head, CAN_MSG_Type* const tail) {
+	CAN_MSG_Type* np = NULL;
+
+	if (p == tail) {
+		np = head;
+	} else {
+		np = (CAN_MSG_Type*)p + sizeof(CAN_MSG_Type);
+	}
+
+	return np;
+}
