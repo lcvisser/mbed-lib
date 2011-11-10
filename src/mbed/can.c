@@ -291,7 +291,7 @@ void CAN_IRQHandler(void) {
 		/* Check if a message is sent. */
 		if ( icrCAN0 & ((1 << 1) | (1 << 9) | (1 << 10)) ) {
 			// At least 1 tx buffer is available, send message if available
-			if (_txBuf1_ri < _txBuf1_wi) {
+			if (_txBuf1_ri != _txBuf1_wi) {
 				msg = _txBuf0[_txBuf0_ri];
 				_txBuf0_ri = _incrIndex(_txBuf0_ri);
 				CAN_SendMsg(LPC_CAN1, &msg);
@@ -314,7 +314,7 @@ void CAN_IRQHandler(void) {
 		/* Check if a message is sent. */
 		if ( icrCAN1 & ((1 << 1) | (1 << 9) | (1 << 10)) ) {
 			// At least 1 tx buffer is available, send message if available
-			if (_txBuf1_ri < _txBuf1_wi) {
+			if (_txBuf1_ri != _txBuf1_wi) {
 				msg = _txBuf1[_txBuf1_ri];
 				_txBuf1_ri = _incrIndex(_txBuf1_ri);
 				CAN_SendMsg(LPC_CAN2, &msg);
@@ -327,7 +327,7 @@ void CAN_IRQHandler(void) {
 }
 
 static uint32_t _incrIndex(volatile const uint32_t index) {
-	if (index == CAN_BUFSIZE) {
+	if (index == (CAN_BUFSIZE - 1)) {
 		return 0;
 	} else {
 		return index + 1;
