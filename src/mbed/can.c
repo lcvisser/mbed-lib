@@ -143,27 +143,31 @@ uint8_t CANOpenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 
 	switch (portNo) {
 		case MBED_CAN0:
-			/* Wait while buffer is empty */
-			while (_rxBuf0_ri == _rxBuf0_wi) ;
-
-			/* Read message */
-			NVIC_DisableIRQ(CAN_IRQn);
-			msg = _rxBuf0[_rxBuf0_ri];
-			_rxBuf0_ri = _incrIndex(_rxBuf0_ri);
-			NVIC_EnableIRQ(CAN_IRQn);
-			r = SUCCESS;
+			/* Check if buffer is empty */
+			if (_rxBuf0_ri == _rxBuf0_wi) {
+				r = ERROR;
+			} else {
+				/* Read message */
+				NVIC_DisableIRQ(CAN_IRQn);
+				msg = _rxBuf0[_rxBuf0_ri];
+				_rxBuf0_ri = _incrIndex(_rxBuf0_ri);
+				NVIC_EnableIRQ(CAN_IRQn);
+				r = SUCCESS;
+			}
 
 			break;
 		case MBED_CAN1:
-			/* Wait while buffer is empty */
-			while (_rxBuf1_ri == _rxBuf1_wi) ;
-
-			/* Read message */
-			NVIC_DisableIRQ(CAN_IRQn);
-			msg = _rxBuf1[_rxBuf1_ri];
-			_rxBuf1_ri = _incrIndex(_rxBuf1_ri);
-			NVIC_EnableIRQ(CAN_IRQn);
-			r = SUCCESS;
+			/* Check if buffer is empty */
+			if (_rxBuf1_ri == _rxBuf1_wi) {
+				r = ERROR;
+			} else {
+				/* Read message */
+				NVIC_DisableIRQ(CAN_IRQn);
+				msg = _rxBuf1[_rxBuf1_ri];
+				_rxBuf1_ri = _incrIndex(_rxBuf1_ri);
+				NVIC_EnableIRQ(CAN_IRQn);
+				r = SUCCESS;
+			}
 
 			break;
 		default:
