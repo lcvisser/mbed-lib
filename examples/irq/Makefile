@@ -1,5 +1,5 @@
 #  Project Name
-PROJECT = mbed_ring-buffer
+PROJECT = mbed_irq
 
 # Directory structure
 SOURCEDIRS = src

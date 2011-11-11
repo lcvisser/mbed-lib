@@ -3,7 +3,7 @@ LIBNAME = libmbed
 
 # Directory structure
 SOURCEDIRS = src/device src/device/asm src/drivers src/mbed
-INCLUDEDIRS = include include/lpc17xx include/lpc17xx/device include/lpc17xx/drivers include/mbed
+INCLUDEDIRS = include include/device include/drivers include/mbed
 BUILDDIR = build
 OUTDIR = lib
 DOCROOT = doc

@@ -3,7 +3,7 @@ MAKE = make
 RM = rm -f
 
 # List of exampels to be built
-EXAMPLES = mini-usb-serial led ring-buffer types
+EXAMPLES = irq mini-usb-serial led types
 
 # Examples targets
 EXDIRS = $(EXAMPLES:%=ex-%)
