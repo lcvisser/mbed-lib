@@ -9,7 +9,11 @@
 
 /*! \brief System initialization function.
  *
- * This function initializes the LPC1768 clock registers and any other functionality that is required.
+ * This function initializes the LPC1768 clock registers and any other
+ * functionality that is required.
+ * \param flags		Functionality to be initialized, indicated by setting 
+ *			corresponding bits.
+ *
  * \sa initflags
  */
 void initSys(uint32_t flags) {
@@ -63,7 +67,7 @@ void initSys(uint32_t flags) {
 
 	if ( (mbedStatus ^ MBED_LED_INIT) && (flags & INIT_LED) ) {
 		initLED();
-		if ( mbedStatus & MBED_TIMER0_INIT ) {
+		if (mbedStatus & MBED_TIMER0_INIT) {
 			ledOn(LED0 | LED1 | LED2 | LED3);
 			delay(MBED_TIMER0, 200);
 			ledOff(LED0 | LED1 | LED2 | LED3);
@@ -79,6 +83,7 @@ void initSys(uint32_t flags) {
 		initGPOutputs();
 	}
 
+	/* Update status flags. */
 	mbedStatus |= MBED_SYS_INIT;
 }
 

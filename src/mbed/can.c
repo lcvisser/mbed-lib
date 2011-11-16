@@ -9,32 +9,50 @@
 
 #include "mbed.h"
 
-/* Baudrates */
-static uint32_t _rate0;
-static uint32_t _rate1;
+/*! \defgroup canrates CAN baudrates
+ * Baudrates for the CAN interfaces. These are set via \ref setCANBaudrate().
+ * @{
+ */
+static uint32_t _rate0;		/*!< Baudrate for MBED_CAN0. */
+static uint32_t _rate1;		/*!< Baudrate for MBED_CAN1. */
+/*! @} */
 
-/* CAN0 receive buffer */
-volatile static CAN_MSG_Type _rxBuf0[CAN_BUFSIZE];
-volatile static uint32_t _rxBuf0_ri;
-volatile static uint32_t _rxBuf0_wi;
+/*! \defgroup can0buf MBED_CAN0 buffers
+ * Receive and transmit buffers for the MBED_CAN0 interface.
+ * @{
+ */
+volatile static CAN_MSG_Type _rxBuf0[CAN_BUFSIZE];	/*!< Receive buffer for MBED_CAN0. */
+volatile static uint32_t _rxBuf0_ri;			/*!< MBED_CAN0 receive buffer read index. */
+volatile static uint32_t _rxBuf0_wi;			/*!< MBED_CAN0 receive buffer write index. */
 
-/* CAN0 transmit buffer */
-volatile static CAN_MSG_Type _txBuf0[CAN_BUFSIZE];
-volatile static uint32_t _txBuf0_ri;
-volatile static uint32_t _txBuf0_wi;
+volatile static CAN_MSG_Type _txBuf0[CAN_BUFSIZE];	/*!< Transmit buffer for MBED_CAN0. */
+volatile static uint32_t _txBuf0_ri;			/*!< MBED_CAN0 transmit buffer read index. */
+volatile static uint32_t _txBuf0_wi;			/*!< MBED_CAN0 transmit buffer write index. */
+/*! @} */
 
-/* CAN1 receive buffer */
-volatile static CAN_MSG_Type _rxBuf1[CAN_BUFSIZE];
-volatile static uint32_t _rxBuf1_ri;
-volatile static uint32_t _rxBuf1_wi;
+/*! \defgroup can1buf MBED_CAN1 buffers
+ * Receive and transmit buffers for the MBED_CAN0 interface.
+ * @{
+ */
+volatile static CAN_MSG_Type _rxBuf1[CAN_BUFSIZE];	/*!< Receive buffer for MBED_CAN1. */
+volatile static uint32_t _rxBuf1_ri;			/*!< MBED_CAN1 receive buffer read index. */
+volatile static uint32_t _rxBuf1_wi;			/*!< MBED_CAN1 receive buffer write index. */
 
-/* CAN1 transmit buffer */
-volatile static CAN_MSG_Type _txBuf1[CAN_BUFSIZE];
-volatile static uint32_t _txBuf1_ri;
-volatile static uint32_t _txBuf1_wi;
+volatile static CAN_MSG_Type _txBuf1[CAN_BUFSIZE];	/*!< Transmit buffer for MBED_CAN1. */
+volatile static uint32_t _txBuf1_ri;			/*!< MBED_CAN1 transmit buffer read index. */
+volatile static uint32_t _txBuf1_wi;			/*!< MBED_CAN1 transmit buffer write index. */
+/*! @} */
 
 static uint32_t _incrIndex(volatile const uint32_t);
 
+/*! \brief Baudrate configuration function.
+ *
+ * This function sets the baudrates for the MBED_CAN0 and MBED_CAN1 devices.
+ * Call this function before calling \ref initSys().
+ * \param portNo 	CAN interface to set the baudrate for. Should be
+ *			MBED_CAN0 or MBED_CAN1.
+ * \param baudrate	Desired baudrate, in bits per second.
+ */
 void setCANBaudrate(uint8_t portNo, uint32_t baudrate) {
 	switch (portNo) {
 		case MBED_CAN0:
@@ -48,6 +66,15 @@ void setCANBaudrate(uint8_t portNo, uint32_t baudrate) {
 	}
 }
 
+/*! \brief CAN initialization function.
+ *
+ * Initalizes the CAN interface. This function is called from \ref initSys(),
+ * only call this function if you know what you are doing.
+ * \param portNo	CAN interface to be initialized. Should be MBED_CAN0 or
+ *			MBED_CAN1.
+ *
+ * \sa initSys()
+ */
 void initCAN(uint8_t portNo) {
 	PINSEL_CFG_Type pinConfig;
 
@@ -63,22 +90,22 @@ void initCAN(uint8_t portNo) {
 
 			pinConfig.Funcnum = PINSEL_FUNC_1;
 			pinConfig.Portnum = PINSEL_PORT_0;
-			pinConfig.Pinnum = 0;		// DIP 9
+			pinConfig.Pinnum = 0;		/* DIP 9 */
 			PINSEL_ConfigPin(&pinConfig);
-			pinConfig.Pinnum = 1;		// DIP 10
+			pinConfig.Pinnum = 1;		/* DIP 10 */
 			PINSEL_ConfigPin(&pinConfig);
 			
 			/* Initialize CAN. */
 			CAN_Init(LPC_CAN1, _rate0);
 			CAN_ModeConfig(LPC_CAN1, CAN_SELFTEST_MODE, ENABLE);
 
-			/* Enable receive and transmit interrupts */
+			/* Enable receive and transmit interrupts. */
 			CAN_IRQCmd(LPC_CAN1, CANINT_RIE, ENABLE);	/* Receive */
 			CAN_IRQCmd(LPC_CAN1, CANINT_TIE1, ENABLE);	/* Transmit 1 */
 			CAN_IRQCmd(LPC_CAN1, CANINT_TIE2, ENABLE);	/* Transmit 2 */
 			CAN_IRQCmd(LPC_CAN1, CANINT_TIE3, ENABLE);	/* Transmit 3 */
 
-			/* Initialize buffers */
+			/* Initialize buffers. */
 			memset((void*)_rxBuf0, 0, sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
 			_rxBuf0_ri = 0;
 			_rxBuf0_wi = 0;
@@ -92,28 +119,28 @@ void initCAN(uint8_t portNo) {
 			break;
 		case MBED_CAN1:
 			/* Check for initialization. */
-			if ( mbedStatus & MBED_CAN1_INIT ) {
+			if (mbedStatus & MBED_CAN1_INIT) {
 				return;
 			}
 
 			pinConfig.Funcnum = PINSEL_FUNC_2;
 			pinConfig.Portnum = PINSEL_PORT_0;
-			pinConfig.Pinnum = 4;		// DIP 30
+			pinConfig.Pinnum = 4;		/* DIP 30 */
 			PINSEL_ConfigPin(&pinConfig);
-			pinConfig.Pinnum = 5;		// DIP 29
+			pinConfig.Pinnum = 5;		/* DIP 29 */
 			PINSEL_ConfigPin(&pinConfig);
 
 			/* Initialize CAN. */
 			CAN_Init(LPC_CAN2, _rate1);
 			CAN_ModeConfig(LPC_CAN2, CAN_SELFTEST_MODE, ENABLE);
 
-			/* Enable receive and transmit interrupts */
+			/* Enable receive and transmit interrupts. */
 			CAN_IRQCmd(LPC_CAN2, CANINT_RIE, ENABLE);	/* Receive */
 			CAN_IRQCmd(LPC_CAN2, CANINT_TIE1, ENABLE);	/* Transmit 1 */
 			CAN_IRQCmd(LPC_CAN2, CANINT_TIE2, ENABLE);	/* Transmit 2 */
 			CAN_IRQCmd(LPC_CAN2, CANINT_TIE3, ENABLE);	/* Transmit 3 */
 
-			/* Initialize buffers */
+			/* Initialize buffers. */
 			memset((void*)_rxBuf1, 0, sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
 			_rxBuf1_ri = 0;
 			_rxBuf1_wi = 0;
@@ -132,22 +159,40 @@ void initCAN(uint8_t portNo) {
 	/* Bypass acceptance filter. */
 	CAN_SetAFMode(LPC_CANAF, CAN_AccBP);
 
-	/* Enable interrupts */
+	/* Enable interrupts. */
 	NVIC_EnableIRQ(CAN_IRQn);
 }
 
-uint8_t CANOpenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t* data) {
+/*! \brief Receive a CAN message via CANopen protocol.
+ *
+ * This routine reads an availabe message from the CAN receive buffer, if
+ * available.
+ * \param portNo	CAN interface to read from. Should be MBED_CAN0 or
+ *			MBED_CAN1.
+ * \param nodeID	Address of variable to store the CAN device ID that sent
+ *			the message.
+ * \param cobType	Address of variable to store the COB type of the
+ *			message.
+ * \param data		Pointer to data storage.
+ *
+ * \returns 0 if a message was successfully read, or an integer larger than 0
+ *          when no message was available.
+ *
+ * \sa CANopenSend()
+ * \sa cobs
+ */
+uint8_t CANopenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t* data) {
 	CAN_MSG_Type msg;
 	uint8_t i = 0;
 	uint8_t r = 0;
 
 	switch (portNo) {
 		case MBED_CAN0:
-			/* Check if buffer is empty */
+			/* Check if buffer is empty. */
 			if (_rxBuf0_ri == _rxBuf0_wi) {
 				r = ERROR;
 			} else {
-				/* Read message */
+				/* Read message. */
 				NVIC_DisableIRQ(CAN_IRQn);
 				msg = _rxBuf0[_rxBuf0_ri];
 				_rxBuf0_ri = _incrIndex(_rxBuf0_ri);
@@ -157,11 +202,11 @@ uint8_t CANOpenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 
 			break;
 		case MBED_CAN1:
-			/* Check if buffer is empty */
+			/* Check if buffer is empty. */
 			if (_rxBuf1_ri == _rxBuf1_wi) {
 				r = ERROR;
 			} else {
-				/* Read message */
+				/* Read message. */
 				NVIC_DisableIRQ(CAN_IRQn);
 				msg = _rxBuf1[_rxBuf1_ri];
 				_rxBuf1_ri = _incrIndex(_rxBuf1_ri);
@@ -175,11 +220,11 @@ uint8_t CANOpenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 			break;
 	}
 
-	if ( r == SUCCESS ) {
-		/* Process message */
+	if (r == SUCCESS) {
+		/* Process message. */
 		*nodeID = msg.id & 0x7f;
 		*cobType = msg.id & (~0x7f);
-		if ( msg.len <= 4 ) {
+		if (msg.len <= 4) {
 			for (i = 0; i < msg.len; i++) {
 				data[i] = msg.dataA[i];
 			}
@@ -196,7 +241,28 @@ uint8_t CANOpenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 	}
 }
 
-uint8_t CANOpenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t len, uint8_t* data) {
+/*! \brief Send a CAN message via CANopen protocol.
+ *
+ * This routine sends a message via the CAN interface. If the message could not
+ * be sent (because the internal transmit buffers are full), the message is
+ * buffered and sent when when of the internal transmit buffers becomes
+ * availble.
+ * \param portNo	CAN interface to send on. Should be MBED_CAN0 or
+ *			MBED_CAN1.
+ * \param nodeID	ID of the CAN device the message should be sent to.
+ * \param cobType	COB type of the message.
+ * \param len		Message length.
+ * \param data		Data to be sent. The total number of bytes that will be
+ *			sent depends on the provided message length, but will
+ *			never be more than eight bytes.
+ *
+ * \returns 0 if a message was successfully sent or buffered, or an integer
+ *          larger than 0 when both sending and buffering failed.
+ *
+ * \sa CANopenRecv()
+ * \sa cobs
+ */
+uint8_t CANopenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t len, uint8_t* data) {
 	CAN_MSG_Type msg;
 	uint8_t i = 0;
 	uint8_t r = 0;
@@ -212,7 +278,7 @@ uint8_t CANOpenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 		msg.len = len;
 	}
 
-	if ( len <= 4 ) {
+	if (len <= 4) {
 		for (i = 0; i < len; i++) {
 			msg.dataA[i] = data[i];
 		}
@@ -225,10 +291,10 @@ uint8_t CANOpenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 	
 	switch (portNo) {
 		case MBED_CAN0:
-			/* Try sending message, otherwise buffer it */
+			/* Try sending message, otherwise buffer it. */
 			if (CAN_SendMsg(LPC_CAN1, &msg) != SUCCESS) {
 				if (_incrIndex(_txBuf0_wi) == _txBuf0_ri) {
-					// Buffer is full
+					/* Buffer is full. */
 					r = ERROR;
 				} else {
 					NVIC_DisableIRQ(CAN_IRQn);
@@ -243,10 +309,10 @@ uint8_t CANOpenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 
 			break;
 		case MBED_CAN1:
-			/* Try sending message, otherwise buffer it */
+			/* Try sending message, otherwise buffer it. */
 			if (CAN_SendMsg(LPC_CAN2, &msg) != SUCCESS) {
 				if (_incrIndex(_txBuf1_wi) == _txBuf1_ri) {
-					// Buffer is full
+					/* Buffer is full. */
 					r = ERROR;
 				} else {
 					NVIC_DisableIRQ(CAN_IRQn);
@@ -265,13 +331,18 @@ uint8_t CANOpenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 			break;
 	}
 
-	if ( r == SUCCESS ) {
+	if (r == SUCCESS) {
 		return 0;
 	} else {
 		return 1;
 	}
 }
 
+/*! \brief CAN IRQ handler.
+ *
+ * This routine is called when either of the CAN devices raises an interrupt. Do
+ * no call this routine yourself.
+ */
 void CAN_IRQHandler(void) {
 	CAN_MSG_Type msg;
 	uint32_t icrCAN0 = 0;
@@ -280,13 +351,13 @@ void CAN_IRQHandler(void) {
 	/* Disable interrupts. */
 	NVIC_DisableIRQ(CAN_IRQn);
 
-	/* Process interrupt for MBED_CAN0. */
+	/* Process interrupts for MBED_CAN0. */
 	if (mbedStatus & MBED_CAN0_INIT) {
 		icrCAN0 = CAN_IntGetStatus(LPC_CAN1);
 
 		/* Check if a message is received. */
-		if (icrCAN0 & (1 << 0) ) {
-			// Read message
+		if ( icrCAN0 & (1 << 0) ) {
+			/* Read message and store it in receive buffer. */
 			CAN_ReceiveMsg(LPC_CAN1, &msg);
 			_rxBuf0[_rxBuf0_wi] = msg;
 			_rxBuf0_wi = _incrIndex(_rxBuf0_wi);
@@ -294,8 +365,8 @@ void CAN_IRQHandler(void) {
 
 		/* Check if a message is sent. */
 		if ( icrCAN0 & ((1 << 1) | (1 << 9) | (1 << 10)) ) {
-			// At least 1 tx buffer is available, send message if available
 			if (_txBuf1_ri != _txBuf1_wi) {
+				/* At least one transmit buffer is available, send any message left in transmit buffer. */
 				msg = _txBuf0[_txBuf0_ri];
 				_txBuf0_ri = _incrIndex(_txBuf0_ri);
 				CAN_SendMsg(LPC_CAN1, &msg);
@@ -308,8 +379,8 @@ void CAN_IRQHandler(void) {
 		icrCAN1 = CAN_IntGetStatus(LPC_CAN2);
 
 		/* Check if a message is received. */
-		if (icrCAN1 & (1 << 0) ) {
-			// Read message
+		if ( icrCAN1 & (1 << 0) ) {
+			/* Read message and store it in receive buffer. */
 			CAN_ReceiveMsg(LPC_CAN2, &msg);
 			_rxBuf1[_rxBuf1_wi] = msg;
 			_rxBuf1_wi = _incrIndex(_rxBuf1_wi);
@@ -317,8 +388,8 @@ void CAN_IRQHandler(void) {
 		
 		/* Check if a message is sent. */
 		if ( icrCAN1 & ((1 << 1) | (1 << 9) | (1 << 10)) ) {
-			// At least 1 tx buffer is available, send message if available
 			if (_txBuf1_ri != _txBuf1_wi) {
+				/* At least one transmit buffer is available, send any message left in transmit buffer. */
 				msg = _txBuf1[_txBuf1_ri];
 				_txBuf1_ri = _incrIndex(_txBuf1_ri);
 				CAN_SendMsg(LPC_CAN2, &msg);

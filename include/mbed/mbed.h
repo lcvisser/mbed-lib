@@ -5,11 +5,18 @@
  * in the LICENSE file.
  */
 
-/*!
- * \file
+/*! \file
  *
- * In this file are all necessary defines for the mbed platform. Also, all
- * all header files are included here for convience, so that including this
+ * \brief In this file are all device definitions for the mbed platform.
+ *
+ * Via these defines, all hardware peripherals are identified and initialized.
+ * \ref initflags are used to indicate which peripherals should be initialized
+ * upons startup. \ref statusflags set in \ref mbedStatus then indicate which
+ * peripherals have been successfully initialized.
+ * 
+ * A number of device IDs is defined to identify various devices.
+ * 
+ * All mbed header files are included here for convience, so that including this
  * header file is sufficient.
  */
 
@@ -26,6 +33,7 @@
 
 /*! \defgroup initflags Initalization flags
  * These flags indicate which functionality should be initialized.
+ *
  * \sa initSys()
  * @{
  */
@@ -121,7 +129,9 @@
 #define MBED_TIMER3	3		/*!< TIMER3. */
 /*! @} */
 
-/*! Global status register. */
+/*! Global status register.
+ * \sa statusflags
+ */
 uint32_t mbedStatus;
 
 /* Function definitions. */
