@@ -52,12 +52,12 @@ void UART0_IRQHandler(void) {
 	/* Disable interrupt */
 	NVIC_DisableIRQ(UART0_IRQn);
 
-	ledOn(LED1);
+	ledOn(MBED_LED1);
 	while (UART_GetLineStatus(LPC_UART0) & UART_LINESTAT_RDR) {
 		writeValue((unsigned char)UART_ReceiveByte(LPC_UART0));
 	}
 	delay(MBED_TIMER0, 50);
-	ledOff(LED1);
+	ledOff(MBED_LED1);
 
 	/* Enable interrupt */
 	NVIC_EnableIRQ(UART0_IRQn);
@@ -86,7 +86,7 @@ int main(void) {
 
 	/* Loop forever */
 	while (1) {
-		ledOn(LED0);
+		ledOn(MBED_LED0);
 		delay(MBED_TIMER0, 2500);
 
 		miniUSBPrint("Reading buffer:\r\n");
@@ -96,7 +96,7 @@ int main(void) {
 			c = readValue();
 		}
 
-		ledOff(LED0);
+		ledOff(MBED_LED0);
 		delay(MBED_TIMER0, 2500);
 	}
 

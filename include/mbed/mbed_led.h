@@ -11,10 +11,10 @@
 #ifndef MBED_LED_H
 #define MBED_LED_H
 
-#define LED0	(1 << 18)
-#define LED1	(1 << 20)
-#define LED2	(1 << 21)
-#define LED3	(1 << 23)
+#define MBED_LED0	(1 << 18)
+#define MBED_LED1	(1 << 20)
+#define MBED_LED2	(1 << 21)
+#define MBED_LED3	(1 << 23)
 
 void initLED(void);
 void ledOn(uint32_t);

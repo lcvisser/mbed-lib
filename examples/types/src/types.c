@@ -23,9 +23,9 @@ int main(void) {
 	
 	/* Loop forever */
 	while (1) {
-		ledOn(LED0);
+		ledOn(MBED_LED0);
 		delay(MBED_TIMER0, 100);
-		ledOff(LED0);
+		ledOff(MBED_LED0);
 		delay(MBED_TIMER0, 100);
 	}
 

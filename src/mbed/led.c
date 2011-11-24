@@ -31,10 +31,10 @@ void initLED(void) {
 	PINSEL_ConfigPin(&pinConfig);
 
 	/* Enable bits corresponding to LEDs as outputs. */
-	GPIO_SetDir(1, LED0 | LED1 | LED2 | LED3, 1);
+	GPIO_SetDir(1, MBED_LED0 | MBED_LED1 | MBED_LED2 | MBED_LED3, 1);
 
-	/* Turn off all LEDs. */
-	GPIO_ClearValue(1, LED0 | LED1 | LED2 | LED3);
+	/* Turn off all MBED_MBED_LEDs. */
+	GPIO_ClearValue(1, MBED_LED0 | MBED_LED1 | MBED_LED2 | MBED_LED3);
 
 	/* Update status flags. */
 	mbedStatus |= MBED_LED_INIT;
