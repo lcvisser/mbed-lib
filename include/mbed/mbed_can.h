@@ -64,6 +64,8 @@ void setCANBaudrate(uint8_t, uint32_t);
 void initCAN(uint8_t);
 uint8_t CANopenRecv(uint8_t, uint8_t*, uint32_t*, uint8_t*);
 uint8_t CANopenSend(uint8_t, uint8_t, uint32_t, uint8_t, uint8_t*);
+void flushCANRxBuffer(uint8_t);
+void flushCANTxBuffer(uint8_t);
 void CAN_IRQHandler(void);
 
 #endif

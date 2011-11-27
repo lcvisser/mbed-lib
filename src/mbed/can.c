@@ -338,6 +338,56 @@ uint8_t CANopenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 	}
 }
 
+/*! \brief Flush CAN receive buffers.
+ *
+ * This routine flushes the CAN receive buffer by discarding all messages.
+ * \param portNo	CAN interface of which the buffer should be flushed.
+ *			Should be MBED_CAN0 or MBED_CAN1.
+ *
+ * \sa flushCANTxBuffer()
+ */
+void flushCANRxBuffer(uint8_t portNo) {
+	switch (portNo) {
+		case MBED_CAN0:
+			memset((void*)_rxBuf0, 0, sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
+			_rxBuf0_ri = 0;
+			_rxBuf0_wi = 0;
+			break;
+		case MBED_CAN1:
+			memset((void*)_rxBuf1, 0, sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
+			_rxBuf1_ri = 0;
+			_rxBuf1_wi = 0;
+			break;
+		default:
+			break;
+	}
+}
+
+/*! \brief Flush CAN transmit buffers.
+ *
+ * This routine flushes the CAN transmit buffer by discarding all messages.
+ * \param portNo	CAN interface of which the buffer should be flushed.
+ *			Should be MBED_CAN0 or MBED_CAN1.
+ *
+ * \sa flushCANTxBuffer()
+ */
+void flushCANTxBuffer(uint8_t portNo) {
+	switch (portNo) {
+		case MBED_CAN0:
+			memset((void*)_txBuf0, 0, sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
+			_txBuf0_ri = 0;
+			_txBuf0_wi = 0;
+			break;
+		case MBED_CAN1:
+			memset((void*)_txBuf1, 0, sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
+			_txBuf1_ri = 0;
+			_txBuf1_wi = 0;
+			break;
+		default:
+			break;
+	}
+}
+
 /*! \brief CAN IRQ handler.
  *
  * This routine is called when either of the CAN devices raises an interrupt. Do
