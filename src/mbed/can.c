@@ -369,7 +369,7 @@ void flushCANRxBuffer(uint8_t portNo) {
  * \param portNo	CAN interface of which the buffer should be flushed.
  *			Should be MBED_CAN0 or MBED_CAN1.
  *
- * \sa flushCANTxBuffer()
+ * \sa flushCANRxBuffer()
  */
 void flushCANTxBuffer(uint8_t portNo) {
 	switch (portNo) {
