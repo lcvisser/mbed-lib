@@ -405,7 +405,7 @@ void CAN_IRQHandler(void) {
 		/* Check if a message is received. */
 		if ( icrCAN0 & (1 << 0) ) {
 			/* Read message and store it in receive buffer. */
-			if (_incr(_rxBuf0_wi) != _rxBuf0_ri) {
+			if (_incrIndex(_rxBuf0_wi) != _rxBuf0_ri) {
 				/* There is space left in the receive buffer. */
 				CAN_ReceiveMsg(LPC_CAN1, &msg);
 				_rxBuf0[_rxBuf0_wi] = msg;
@@ -432,7 +432,7 @@ void CAN_IRQHandler(void) {
 		/* Check if a message is received. */
 		if ( icrCAN1 & (1 << 0) ) {
 			/* Read message and store it in receive buffer. */
-			if (_incr(_rxBuf1_wi) != _rxBuf1_ri) {
+			if (_incrIndex(_rxBuf1_wi) != _rxBuf1_ri) {
 				/* There is space left in the receive buffer. */
 				CAN_ReceiveMsg(LPC_CAN2, &msg);
 				_rxBuf1[_rxBuf1_wi] = msg;
