@@ -405,15 +405,19 @@ void CAN_IRQHandler(void) {
 		/* Check if a message is received. */
 		if ( icrCAN0 & (1 << 0) ) {
 			/* Read message and store it in receive buffer. */
-			CAN_ReceiveMsg(LPC_CAN1, &msg);
-			_rxBuf0[_rxBuf0_wi] = msg;
-			_rxBuf0_wi = _incrIndex(_rxBuf0_wi);
+			if (_incr(_rxBuf0_wi) != _rxBuf0_ri) {
+				/* There is space left in the receive buffer. */
+				CAN_ReceiveMsg(LPC_CAN1, &msg);
+				_rxBuf0[_rxBuf0_wi] = msg;
+				_rxBuf0_wi = _incrIndex(_rxBuf0_wi);
+			}
 		}
 
 		/* Check if a message is sent. */
 		if ( icrCAN0 & ((1 << 1) | (1 << 9) | (1 << 10)) ) {
+			/* At least one transmit buffer is available for sending. */
 			if (_txBuf1_ri != _txBuf1_wi) {
-				/* At least one transmit buffer is available, send any message left in transmit buffer. */
+				/* There is at least one message pending in the transmit buffer. */
 				msg = _txBuf0[_txBuf0_ri];
 				_txBuf0_ri = _incrIndex(_txBuf0_ri);
 				CAN_SendMsg(LPC_CAN1, &msg);
@@ -428,15 +432,19 @@ void CAN_IRQHandler(void) {
 		/* Check if a message is received. */
 		if ( icrCAN1 & (1 << 0) ) {
 			/* Read message and store it in receive buffer. */
-			CAN_ReceiveMsg(LPC_CAN2, &msg);
-			_rxBuf1[_rxBuf1_wi] = msg;
-			_rxBuf1_wi = _incrIndex(_rxBuf1_wi);
+			if (_incr(_rxBuf1_wi) != _rxBuf1_ri) {
+				/* There is space left in the receive buffer. */
+				CAN_ReceiveMsg(LPC_CAN2, &msg);
+				_rxBuf1[_rxBuf1_wi] = msg;
+				_rxBuf1_wi = _incrIndex(_rxBuf1_wi);
+			}
 		}
 		
 		/* Check if a message is sent. */
 		if ( icrCAN1 & ((1 << 1) | (1 << 9) | (1 << 10)) ) {
+			/* At least one transmit buffer is available for sending. */
 			if (_txBuf1_ri != _txBuf1_wi) {
-				/* At least one transmit buffer is available, send any message left in transmit buffer. */
+				/* There is at least one message pending in the transmit buffer. */
 				msg = _txBuf1[_txBuf1_ri];
 				_txBuf1_ri = _incrIndex(_txBuf1_ri);
 				CAN_SendMsg(LPC_CAN2, &msg);
