@@ -416,7 +416,7 @@ void CAN_IRQHandler(void) {
 		/* Check if a message is sent. */
 		if ( icrCAN0 & ((1 << 1) | (1 << 9) | (1 << 10)) ) {
 			/* At least one transmit buffer is available for sending. */
-			if (_txBuf1_ri != _txBuf1_wi) {
+			if (_txBuf0_ri != _txBuf0_wi) {
 				/* There is at least one message pending in the transmit buffer. */
 				msg = _txBuf0[_txBuf0_ri];
 				_txBuf0_ri = _incrIndex(_txBuf0_ri);
