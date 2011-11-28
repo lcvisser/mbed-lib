@@ -31,6 +31,15 @@ OBJS = $(foreach CFILE, $(CFILES), $(BUILDDIR)/$(basename $(notdir $(CFILE))).o)
 VPATH = $(foreach DIR, $(SOURCEDIRS), $(strip $(DIR)):)
 
 # Build rules
+.PHONY: all clean 
+
+all: $(BUILDDIR)/$(PROJECT).hex $(OUTDIR)/$(PROJECT).bin
+
+clean:
+	$(RM) $(OBJS)
+	$(RM) $(BUILDDIR)/$(PROJECT).*
+	$(RM) $(OUTDIR)/$(PROJECT).*
+	
 $(OUTDIR)/$(PROJECT).bin: $(BUILDDIR)/$(PROJECT).elf
 	$(OBJCOPY) -O binary -j .text -j .data $(BUILDDIR)/$(PROJECT).elf $(OUTDIR)/$(PROJECT).bin
 
@@ -50,12 +59,3 @@ $(OUTDIR):
 
 $(BUILDDIR): | $(OUTDIR)
 	$(MKDIR) $(BUILDDIR)
-
-.PHONY: all clean 
-
-all: $(BUILDDIR)/$(PROJECT).hex $(OUTDIR)/$(PROJECT).bin
-
-clean:
-	$(RM) $(OBJS)
-	$(RM) $(BUILDDIR)/$(PROJECT).*
-	$(RM) $(OUTDIR)/$(PROJECT).*

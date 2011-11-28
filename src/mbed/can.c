@@ -193,10 +193,10 @@ uint8_t CANopenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 				r = ERROR;
 			} else {
 				/* Read message. */
-				NVIC_DisableIRQ(CAN_IRQn);
+				NVIC_SetPendingIRQ(CAN_IRQn);
 				msg = _rxBuf0[_rxBuf0_ri];
 				_rxBuf0_ri = _incrIndex(_rxBuf0_ri);
-				NVIC_EnableIRQ(CAN_IRQn);
+				NVIC_ClearPendingIRQ(CAN_IRQn);
 				r = SUCCESS;
 			}
 
@@ -207,10 +207,10 @@ uint8_t CANopenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 				r = ERROR;
 			} else {
 				/* Read message. */
-				NVIC_DisableIRQ(CAN_IRQn);
+				NVIC_SetPendingIRQ(CAN_IRQn);
 				msg = _rxBuf1[_rxBuf1_ri];
 				_rxBuf1_ri = _incrIndex(_rxBuf1_ri);
-				NVIC_EnableIRQ(CAN_IRQn);
+				NVIC_ClearPendingIRQ(CAN_IRQn);
 				r = SUCCESS;
 			}
 
@@ -297,10 +297,10 @@ uint8_t CANopenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 					/* Buffer is full. */
 					r = ERROR;
 				} else {
-					NVIC_DisableIRQ(CAN_IRQn);
+					NVIC_SetPendingIRQ(CAN_IRQn);
 					_txBuf0[_txBuf0_wi] = msg;
 					_txBuf0_wi = _incrIndex(_txBuf0_wi);
-					NVIC_EnableIRQ(CAN_IRQn);
+					NVIC_ClearPendingIRQ(CAN_IRQn);
 					r = SUCCESS;
 				}
 			} else {
@@ -315,10 +315,10 @@ uint8_t CANopenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 					/* Buffer is full. */
 					r = ERROR;
 				} else {
-					NVIC_DisableIRQ(CAN_IRQn);
+					NVIC_SetPendingIRQ(CAN_IRQn);
 					_txBuf1[_txBuf1_wi] = msg;
 					_txBuf1_wi = _incrIndex(_txBuf1_wi);
-					NVIC_EnableIRQ(CAN_IRQn);
+					NVIC_ClearPendingIRQ(CAN_IRQn);
 					r = SUCCESS;
 				}
 			} else {
@@ -398,9 +398,6 @@ void CAN_IRQHandler(void) {
 	uint32_t icrCAN0 = 0;
 	uint32_t icrCAN1 = 0;
 
-	/* Disable interrupts. */
-	NVIC_DisableIRQ(CAN_IRQn);
-
 	/* Process interrupts for MBED_CAN0. */
 	if (mbedStatus & MBED_CAN0_INIT) {
 		icrCAN0 = CAN_IntGetStatus(LPC_CAN1);
@@ -446,9 +443,6 @@ void CAN_IRQHandler(void) {
 			}
 		}
 	}
-
-	/* Enable interrupts. */
-	NVIC_EnableIRQ(CAN_IRQn);
 }
 
 static uint32_t _incrIndex(volatile const uint32_t index) {

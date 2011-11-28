@@ -49,18 +49,12 @@ void writeValue(unsigned char c) {
 
 /* UART0 interrupt handler */
 void UART0_IRQHandler(void) {
-	/* Disable interrupt */
-	NVIC_DisableIRQ(UART0_IRQn);
-
 	ledOn(MBED_LED1);
 	while (UART_GetLineStatus(LPC_UART0) & UART_LINESTAT_RDR) {
 		writeValue((unsigned char)UART_ReceiveByte(LPC_UART0));
 	}
 	delay(MBED_TIMER0, 50);
 	ledOff(MBED_LED1);
-
-	/* Enable interrupt */
-	NVIC_EnableIRQ(UART0_IRQn);
 }
 
 /* Main function */
