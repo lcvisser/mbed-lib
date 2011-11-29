@@ -186,6 +186,7 @@ uint8_t CANopenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 	uint8_t i = 0;
 	uint8_t r = 0;
 
+	NVIC_SetPendingIRQ(CAN_IRQn);
 	switch (portNo) {
 		case MBED_CAN0:
 			/* Check if buffer is empty. */
@@ -193,10 +194,8 @@ uint8_t CANopenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 				r = ERROR;
 			} else {
 				/* Read message. */
-				NVIC_SetPendingIRQ(CAN_IRQn);
 				msg = _rxBuf0[_rxBuf0_ri];
 				_rxBuf0_ri = _incrIndex(_rxBuf0_ri);
-				NVIC_ClearPendingIRQ(CAN_IRQn);
 				r = SUCCESS;
 			}
 
@@ -207,10 +206,8 @@ uint8_t CANopenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 				r = ERROR;
 			} else {
 				/* Read message. */
-				NVIC_SetPendingIRQ(CAN_IRQn);
 				msg = _rxBuf1[_rxBuf1_ri];
 				_rxBuf1_ri = _incrIndex(_rxBuf1_ri);
-				NVIC_ClearPendingIRQ(CAN_IRQn);
 				r = SUCCESS;
 			}
 
@@ -219,6 +216,7 @@ uint8_t CANopenRecv(uint8_t portNo, uint8_t* nodeID, uint32_t* cobType, uint8_t*
 			r = ERROR;
 			break;
 	}
+	NVIC_ClearPendingIRQ(CAN_IRQn);
 
 	if (r == SUCCESS) {
 		/* Process message. */
@@ -289,6 +287,7 @@ uint8_t CANopenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 		}
 	}
 	
+	NVIC_SetPendingIRQ(CAN_IRQn);
 	switch (portNo) {
 		case MBED_CAN0:
 			/* Try sending message, otherwise buffer it. */
@@ -297,10 +296,8 @@ uint8_t CANopenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 					/* Buffer is full. */
 					r = ERROR;
 				} else {
-					NVIC_SetPendingIRQ(CAN_IRQn);
 					_txBuf0[_txBuf0_wi] = msg;
 					_txBuf0_wi = _incrIndex(_txBuf0_wi);
-					NVIC_ClearPendingIRQ(CAN_IRQn);
 					r = SUCCESS;
 				}
 			} else {
@@ -315,10 +312,8 @@ uint8_t CANopenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 					/* Buffer is full. */
 					r = ERROR;
 				} else {
-					NVIC_SetPendingIRQ(CAN_IRQn);
 					_txBuf1[_txBuf1_wi] = msg;
 					_txBuf1_wi = _incrIndex(_txBuf1_wi);
-					NVIC_ClearPendingIRQ(CAN_IRQn);
 					r = SUCCESS;
 				}
 			} else {
@@ -330,6 +325,7 @@ uint8_t CANopenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
 			r = ERROR;
 			break;
 	}
+	NVIC_ClearPendingIRQ(CAN_IRQn);
 
 	if (r == SUCCESS) {
 		return 0;
@@ -420,7 +416,7 @@ void CAN_IRQHandler(void) {
 				/* There is at least one message pending in the transmit buffer. */
 				msg = _txBuf0[_txBuf0_ri];
 				_txBuf0_ri = _incrIndex(_txBuf0_ri);
-				CAN_SendMsg(LPC_CAN1, &msg);
+				while (CAN_SendMsg(LPC_CAN1, &msg) != SUCCESS) ;
 			}
 		}
 	}
@@ -447,7 +443,7 @@ void CAN_IRQHandler(void) {
 				/* There is at least one message pending in the transmit buffer. */
 				msg = _txBuf1[_txBuf1_ri];
 				_txBuf1_ri = _incrIndex(_txBuf1_ri);
-				CAN_SendMsg(LPC_CAN2, &msg);
+				while (CAN_SendMsg(LPC_CAN2, &msg) != SUCCESS) ;
 			}
 		}
 	}
