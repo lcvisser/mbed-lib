@@ -343,6 +343,7 @@ uint8_t CANopenSend(uint8_t portNo, uint8_t nodeID, uint32_t cobType, uint8_t le
  * \sa flushCANTxBuffer()
  */
 void flushCANRxBuffer(uint8_t portNo) {
+	NVIC_SetPendingIRQ(CAN_IRQn);
 	switch (portNo) {
 		case MBED_CAN0:
 			memset((void*)_rxBuf0, 0, sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
@@ -357,6 +358,7 @@ void flushCANRxBuffer(uint8_t portNo) {
 		default:
 			break;
 	}
+	NVIC_ClearPendingIRQ(CAN_IRQn);
 }
 
 /*! \brief Flush CAN transmit buffers.
@@ -368,6 +370,7 @@ void flushCANRxBuffer(uint8_t portNo) {
  * \sa flushCANRxBuffer()
  */
 void flushCANTxBuffer(uint8_t portNo) {
+	NVIC_SetPendingIRQ(CAN_IRQn);
 	switch (portNo) {
 		case MBED_CAN0:
 			memset((void*)_txBuf0, 0, sizeof(CAN_MSG_Type[CAN_BUFSIZE]));
@@ -382,6 +385,7 @@ void flushCANTxBuffer(uint8_t portNo) {
 		default:
 			break;
 	}
+	NVIC_ClearPendingIRQ(CAN_IRQn);
 }
 
 /*! \brief CAN IRQ handler.

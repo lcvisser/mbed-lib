@@ -53,67 +53,65 @@
 <div class="title">mbed_gpio.h</div>  </div>
 </div>
 <div class="contents">
-<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/* Copyright (c) Ludo Visser</span>
+<a href="mbed__gpio_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/* Copyright (c) Ludo Visser</span>
 <a name="l00002"></a>00002 <span class="comment"> *</span>
 <a name="l00003"></a>00003 <span class="comment"> * This file is part of the mbed-lib project, and is distributed under the</span>
 <a name="l00004"></a>00004 <span class="comment"> * terms of the MIT License. The full license agreement text can be found</span>
 <a name="l00005"></a>00005 <span class="comment"> * in the LICENSE file.</span>
 <a name="l00006"></a>00006 <span class="comment"> */</span>
 <a name="l00007"></a>00007 
-<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;LPC17xx.h&quot;</span>
-<a name="l00009"></a>00009 <span class="preprocessor">#include &quot;lpc17xx_gpio.h&quot;</span>
-<a name="l00010"></a>00010 
-<a name="l00011"></a>00011 <span class="preprocessor">#ifndef MBED_GPIO_H</span>
-<a name="l00012"></a>00012 <span class="preprocessor"></span><span class="preprocessor">#define MBED_GPIO_H</span>
-<a name="l00013"></a>00013 <span class="preprocessor"></span>
-<a name="l00014"></a>00014 <span class="preprocessor">#define GPIO5   9       </span><span class="comment">/* port 0 */</span>
-<a name="l00015"></a>00015 <span class="preprocessor">#define GPIO6   8       </span><span class="comment">/* port 0 */</span>
-<a name="l00016"></a>00016 <span class="preprocessor">#define GPIO7   7       </span><span class="comment">/* port 0 */</span>
-<a name="l00017"></a>00017 <span class="preprocessor">#define GPIO8   6       </span><span class="comment">/* port 0 */</span>
-<a name="l00018"></a>00018 <span class="preprocessor">#define GPIO9   0       </span><span class="comment">/* port 0 */</span>
-<a name="l00019"></a>00019 <span class="preprocessor">#define GPIO10  1       </span><span class="comment">/* port 0 */</span>
-<a name="l00020"></a>00020 <span class="preprocessor">#define GPIO11  18      </span><span class="comment">/* port 0 */</span>
-<a name="l00021"></a>00021 <span class="preprocessor">#define GPIO12  17      </span><span class="comment">/* port 0 */</span>
-<a name="l00022"></a>00022 <span class="preprocessor">#define GPIO13  15      </span><span class="comment">/* port 0 */</span>
-<a name="l00023"></a>00023 <span class="preprocessor">#define GPIO14  16      </span><span class="comment">/* port 0 */</span>
-<a name="l00024"></a>00024 <span class="preprocessor">#define GPIO15  23      </span><span class="comment">/* port 0 */</span>
-<a name="l00025"></a>00025 <span class="preprocessor">#define GPIO16  24      </span><span class="comment">/* port 0 */</span>
-<a name="l00026"></a>00026 <span class="preprocessor">#define GPIO17  25      </span><span class="comment">/* port 0 */</span>
-<a name="l00027"></a>00027 <span class="preprocessor">#define GPIO18  26      </span><span class="comment">/* port 0 */</span>
-<a name="l00028"></a>00028 <span class="preprocessor">#define GPIO19  30      </span><span class="comment">/* port 1 */</span>
-<a name="l00029"></a>00029 <span class="preprocessor">#define GPIO20  31      </span><span class="comment">/* port 1 */</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#define GPIO21  5       </span><span class="comment">/* port 2 */</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#define GPIO22  4       </span><span class="comment">/* port 2 */</span>
-<a name="l00032"></a>00032 <span class="preprocessor">#define GPIO23  3       </span><span class="comment">/* port 2 */</span>
-<a name="l00033"></a>00033 <span class="preprocessor">#define GPIO24  2       </span><span class="comment">/* port 2 */</span>
-<a name="l00034"></a>00034 <span class="preprocessor">#define GPIO25  1       </span><span class="comment">/* port 2 */</span>
-<a name="l00035"></a>00035 <span class="preprocessor">#define GPIO26  0       </span><span class="comment">/* port 2 */</span>
-<a name="l00036"></a>00036 <span class="preprocessor">#define GPIO27  11      </span><span class="comment">/* port 0 */</span>
-<a name="l00037"></a>00037 <span class="preprocessor">#define GPIO28  10      </span><span class="comment">/* port 0 */</span>
-<a name="l00038"></a>00038 <span class="preprocessor">#define GPIO29  5       </span><span class="comment">/* port 0 */</span>
-<a name="l00039"></a>00039 <span class="preprocessor">#define GPIO30  4       </span><span class="comment">/* port 0 */</span>
-<a name="l00040"></a>00040 
-<a name="l00041"></a>00041 <span class="preprocessor">#define GP_LOW  0</span>
-<a name="l00042"></a>00042 <span class="preprocessor"></span><span class="preprocessor">#define GP_HIGH 1</span>
-<a name="l00043"></a>00043 <span class="preprocessor"></span><span class="preprocessor">#define GP_ERR  2       </span><span class="comment">/* Pin is not configured */</span>
-<a name="l00044"></a>00044 
-<a name="l00045"></a>00045 <span class="keywordtype">void</span> setGPInputCfg(uint32_t);
-<a name="l00046"></a>00046 <span class="keywordtype">void</span> setGPOutputCfg(uint32_t);
-<a name="l00047"></a>00047 <span class="keywordtype">void</span> initGPInputs(<span class="keywordtype">void</span>);
-<a name="l00048"></a>00048 <span class="keywordtype">void</span> initGPOutputs(<span class="keywordtype">void</span>);
-<a name="l00049"></a>00049 <span class="keywordtype">void</span> checkConflicts(<span class="keywordtype">void</span>);
-<a name="l00050"></a>00050 <span class="keywordtype">void</span> initGPIO(uint32_t, uint32_t);
-<a name="l00051"></a>00051 <span class="keywordtype">void</span> GPIOSetVal(uint32_t, uint8_t);
-<a name="l00052"></a>00052 uint8_t GPIOReadVal(uint32_t);
-<a name="l00053"></a>00053 
-<a name="l00054"></a>00054 <span class="preprocessor">#endif</span>
-<a name="l00055"></a>00055 <span class="preprocessor"></span>
+<a name="l00017"></a>00017 <span class="preprocessor">#include &quot;LPC17xx.h&quot;</span>
+<a name="l00018"></a>00018 <span class="preprocessor">#include &quot;lpc17xx_gpio.h&quot;</span>
+<a name="l00019"></a>00019 
+<a name="l00020"></a>00020 <span class="preprocessor">#ifndef MBED_GPIO_H</span>
+<a name="l00021"></a><a class="code" href="mbed__gpio_8h.html#a6361914f366fe89588f0ec638a544a7d">00021</a> <span class="preprocessor"></span><span class="preprocessor">#define MBED_GPIO_H     </span>
+<a name="l00027"></a><a class="code" href="group__gpiopins.html#ga1a96368c99d63b0e715b7e0421f4a209">00027</a> <span class="preprocessor">#define GPIO5   9       </span>
+<a name="l00028"></a><a class="code" href="group__gpiopins.html#ga46027cd97ff756e5ddadcc10811b5699">00028</a> <span class="preprocessor">#define GPIO6   8       </span>
+<a name="l00029"></a><a class="code" href="group__gpiopins.html#ga3820cacb614277004870fc37b33ad084">00029</a> <span class="preprocessor">#define GPIO7   7       </span>
+<a name="l00030"></a><a class="code" href="group__gpiopins.html#gaa951be0ce26f788049a86e407a70ae20">00030</a> <span class="preprocessor">#define GPIO8   6       </span>
+<a name="l00031"></a><a class="code" href="group__gpiopins.html#gae2a4c4d28729daf18e1923a1878e7352">00031</a> <span class="preprocessor">#define GPIO9   0       </span>
+<a name="l00032"></a><a class="code" href="group__gpiopins.html#gae285b2475841ecb1ac23d8511b360d0e">00032</a> <span class="preprocessor">#define GPIO10  1       </span>
+<a name="l00033"></a><a class="code" href="group__gpiopins.html#gac376b1c124378935df7b3c171b2bef35">00033</a> <span class="preprocessor">#define GPIO11  18      </span>
+<a name="l00034"></a><a class="code" href="group__gpiopins.html#ga1dfa6e5489489f2797d3d80c718716ce">00034</a> <span class="preprocessor">#define GPIO12  17      </span>
+<a name="l00035"></a><a class="code" href="group__gpiopins.html#ga4b7d9a3961712ddd2a58532f4dcedc1d">00035</a> <span class="preprocessor">#define GPIO13  15      </span>
+<a name="l00036"></a><a class="code" href="group__gpiopins.html#gad42a78782c6bb99ad7e7c1ec975b5b96">00036</a> <span class="preprocessor">#define GPIO14  16      </span>
+<a name="l00037"></a><a class="code" href="group__gpiopins.html#gaabc2f003b1495cd03eef1fae31e6847a">00037</a> <span class="preprocessor">#define GPIO15  23      </span>
+<a name="l00038"></a><a class="code" href="group__gpiopins.html#ga209f1a013588f481824ff0f57d2fc21e">00038</a> <span class="preprocessor">#define GPIO16  24      </span>
+<a name="l00039"></a><a class="code" href="group__gpiopins.html#gabf972cfb05a7f86e9a69db243792cbac">00039</a> <span class="preprocessor">#define GPIO17  25      </span>
+<a name="l00040"></a><a class="code" href="group__gpiopins.html#gaaa3c86348d99077ec718c2461f0d4a91">00040</a> <span class="preprocessor">#define GPIO18  26      </span>
+<a name="l00041"></a><a class="code" href="group__gpiopins.html#ga546be0d3be4335be87bd46b9d6442edd">00041</a> <span class="preprocessor">#define GPIO19  30      </span>
+<a name="l00042"></a><a class="code" href="group__gpiopins.html#ga414493de8389b7908e5e8b6723a5fdd3">00042</a> <span class="preprocessor">#define GPIO20  31      </span>
+<a name="l00043"></a><a class="code" href="group__gpiopins.html#ga3b9ee0b882294530e8d2f343af3ba0fe">00043</a> <span class="preprocessor">#define GPIO21  5       </span>
+<a name="l00044"></a><a class="code" href="group__gpiopins.html#gabdcdabfb67b100b20bd0326d730b69bb">00044</a> <span class="preprocessor">#define GPIO22  4       </span>
+<a name="l00045"></a><a class="code" href="group__gpiopins.html#gabd64ab501b16d9074764973f71adde81">00045</a> <span class="preprocessor">#define GPIO23  3       </span>
+<a name="l00046"></a><a class="code" href="group__gpiopins.html#ga5d3043fd1db106a844092560243b5ddf">00046</a> <span class="preprocessor">#define GPIO24  2       </span>
+<a name="l00047"></a><a class="code" href="group__gpiopins.html#ga36cff7d300b200f71fcf3341651c4ae1">00047</a> <span class="preprocessor">#define GPIO25  1       </span>
+<a name="l00048"></a><a class="code" href="group__gpiopins.html#ga1471cf2ee224d707874fa19c68b3d5dc">00048</a> <span class="preprocessor">#define GPIO26  0       </span>
+<a name="l00049"></a><a class="code" href="group__gpiopins.html#ga0a715cbedcbaadfd991b28b3ce1caa07">00049</a> <span class="preprocessor">#define GPIO27  11      </span>
+<a name="l00050"></a><a class="code" href="group__gpiopins.html#ga6e5ccec6266bec3c50538e4b5a9cb0d7">00050</a> <span class="preprocessor">#define GPIO28  10      </span>
+<a name="l00051"></a><a class="code" href="group__gpiopins.html#ga62fa810782439ccd99ea38f7ed500a94">00051</a> <span class="preprocessor">#define GPIO29  5       </span>
+<a name="l00052"></a><a class="code" href="group__gpiopins.html#gab2aa0ef0d4e65930b0caa23b1bf65388">00052</a> <span class="preprocessor">#define GPIO30  4       </span>
+<a name="l00061"></a><a class="code" href="group__gpiolvl.html#gafe686f24f6bac080eaf4aed75aeba3b0">00061</a> <span class="preprocessor">#define GP_LOW  0       </span>
+<a name="l00062"></a><a class="code" href="group__gpiolvl.html#ga4b4791b739a1a72fd60f226f2e4b918c">00062</a> <span class="preprocessor">#define GP_HIGH 1       </span>
+<a name="l00063"></a><a class="code" href="group__gpiolvl.html#ga671a1cdc05526c619354a615394eb932">00063</a> <span class="preprocessor">#define GP_ERR  2       </span>
+<a name="l00066"></a>00066 <span class="preprocessor"></span><span class="comment">/* Function defintions. */</span>
+<a name="l00067"></a>00067 <span class="keywordtype">void</span> setGPInputCfg(uint32_t);
+<a name="l00068"></a>00068 <span class="keywordtype">void</span> setGPOutputCfg(uint32_t);
+<a name="l00069"></a>00069 <span class="keywordtype">void</span> initGPInputs(<span class="keywordtype">void</span>);
+<a name="l00070"></a>00070 <span class="keywordtype">void</span> initGPOutputs(<span class="keywordtype">void</span>);
+<a name="l00071"></a>00071 <span class="keywordtype">void</span> checkConflicts(<span class="keywordtype">void</span>);
+<a name="l00072"></a>00072 <span class="keywordtype">void</span> initGPIO(uint32_t, uint32_t);
+<a name="l00073"></a>00073 <span class="keywordtype">void</span> GPIOSetVal(uint32_t, uint8_t);
+<a name="l00074"></a>00074 uint8_t GPIOReadVal(uint32_t);
+<a name="l00075"></a>00075 
+<a name="l00076"></a>00076 <span class="preprocessor">#endif</span>
+<a name="l00077"></a>00077 <span class="preprocessor"></span>
 </pre></div></div>
 </div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 28 2011 18:36:35 for mbed-lib by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Dec 7 2011 23:03:19 for mbed-lib by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

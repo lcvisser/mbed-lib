@@ -42,7 +42,6 @@
 /*! @} */
 
 /*! \defgroup nmt Network management commands
- *
  * CANOpen network management commands are used for node control.
  * @{
  */

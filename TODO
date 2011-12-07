@@ -7,6 +7,4 @@ Missing functionality:
 
 Desired features:
 * Have _sbrk also check for stack collision
-* Make baudrates programmable
 * Implement CAN2B and RTR
-* Write a configuration script to setup Makefiles

@@ -4,12 +4,12 @@ The project website is at
 
 http://code.google.com/p/mbed-lib
 
-The mbed-lib package provides development libraries for the mbed (http://mbed.org). The library also includes the LPC17xx CMSIS Library interface provided by NXP.
+The mbed-lib package provides open source development libraries for the mbed (http://mbed.org). The library also includes the LPC17xx CMSIS Library interface provided by NXP.
 
 
 REQUIREMENTS
 ------------
-You can downlaod the binaries and source from
+You can download the binaries and source from
 
 http://code.google.com/p/mbed-lib/
 
@@ -22,9 +22,10 @@ Running `make' builds both libmbed.
 
 The build targets are:
 * all
-* examples
+* mbed-lib
+* mbed-examples
+* mbed-doc
 * clean
-* clean-examples
 They pretty much do what you'd expect them to.
 
 

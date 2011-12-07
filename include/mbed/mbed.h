@@ -33,7 +33,6 @@
 
 /*! \defgroup initflags Initalization flags
  * These flags indicate which functionality should be initialized.
- *
  * \sa initSys()
  * @{
  */
