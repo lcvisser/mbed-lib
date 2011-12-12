@@ -420,7 +420,8 @@ void CAN_IRQHandler(void) {
 				/* There is at least one message pending in the transmit buffer. */
 				msg = _txBuf0[_txBuf0_ri];
 				_txBuf0_ri = _incrIndex(_txBuf0_ri);
-				while (CAN_SendMsg(LPC_CAN1, &msg) != SUCCESS) ;
+				//while (CAN_SendMsg(LPC_CAN1, &msg) != SUCCESS) ;
+				CAN_SendMsg(LPC_CAN1, &msg);
 			}
 		}
 	}
@@ -447,7 +448,8 @@ void CAN_IRQHandler(void) {
 				/* There is at least one message pending in the transmit buffer. */
 				msg = _txBuf1[_txBuf1_ri];
 				_txBuf1_ri = _incrIndex(_txBuf1_ri);
-				while (CAN_SendMsg(LPC_CAN2, &msg) != SUCCESS) ;
+				//while (CAN_SendMsg(LPC_CAN2, &msg) != SUCCESS) ;
+				CAN_SendMsg(LPC_CAN2, &msg);
 			}
 		}
 	}
