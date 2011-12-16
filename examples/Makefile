@@ -2,8 +2,8 @@
 MAKE = make
 RM = rm -f
 
-# List of exampels to be built
-EXAMPLES = irq mini-usb-serial led types
+# List of examples to be built
+EXAMPLES = irq led mini-usb-serial serial types
 
 # Examples targets
 EXDIRS = $(EXAMPLES:%=ex-%)
