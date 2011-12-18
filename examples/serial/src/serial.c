@@ -10,10 +10,10 @@ int main(void) {
 	initSys(INIT_LED | INIT_SERIAL1 | INIT_TIMER0);
 	
 	while (1) {
-		ledOn(MBED_LED0);
+		LEDOn(MBED_LED0);
 		serialSend(MBED_SERIAL1, &c, 1);
 		delay(MBED_TIMER0, 500);
-		ledOff(MBED_LED0);
+		LEDOff(MBED_LED0);
 		delay(MBED_TIMER0, 500);
 	}
 

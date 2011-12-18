@@ -71,6 +71,7 @@ void initGPOutputs(void);
 void checkConflicts(void);
 void initGPIO(uint32_t, uint32_t);
 void GPIOSetVal(uint32_t, uint8_t);
+void GPIOToggle(uint32_t);
 uint8_t GPIOReadVal(uint32_t);
 
 #endif

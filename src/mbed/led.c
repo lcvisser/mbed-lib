@@ -41,17 +41,24 @@ void initLED(void) {
 }
 
 /* Turn LED on */
-void ledOn(uint32_t led) {
+void LEDOn(uint32_t led) {
 	GPIO_SetValue(1, led);
 }
 
 /* Turn LED off */
-void ledOff(uint32_t led) {
+void LEDOff(uint32_t led) {
 	GPIO_ClearValue(1, led);
 }
 
 /* Toggle LED */
-void ledToggle(uint32_t led) {
-	/* TODO */
+void LEDToggle(uint32_t led) {
+	uint32_t ledStatus;
+
+	ledStatus = GPIO_ReadValue(1);
+	if (ledStatus & led) {
+		GPIO_ClearValue(1, led);
+	} else {
+		GPIO_SetValue(1, led);
+	}
 }
 

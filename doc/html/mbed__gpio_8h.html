@@ -113,6 +113,8 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO initialization function.  <a href="#aa5d557c3eeadde7a041e0b06d6f9e71d"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mbed__gpio_8h.html#a344e9371bb21f52a9a5c20cf1cc1ecca">GPIOSetVal</a> (uint32_t, uint8_t)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set value for general purpose outputs.  <a href="#a344e9371bb21f52a9a5c20cf1cc1ecca"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mbed__gpio_8h.html#a2302b858d97f2a0a1f1c30539edcc868">GPIOToggle</a> (uint32_t)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggle value for general purpose outputs.  <a href="#a2302b858d97f2a0a1f1c30539edcc868"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mbed__gpio_8h.html#a31f1ab5713448e3d116a1f8e3b5279a5">GPIOReadVal</a> (uint32_t)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Read value from general purpose inputs.  <a href="#a31f1ab5713448e3d116a1f8e3b5279a5"></a><br/></td></tr>
 </table>
@@ -184,7 +186,9 @@ Functions</h2></td></tr>
 <dd>
 <a class="el" href="group__gpiolvl.html">GPIO levels</a> </dd>
 <dd>
-<a class="el" href="mbed__gpio_8h.html#a344e9371bb21f52a9a5c20cf1cc1ecca" title="Set value for general purpose outputs.">GPIOSetVal()</a> </dd></dl>
+<a class="el" href="mbed__gpio_8h.html#a344e9371bb21f52a9a5c20cf1cc1ecca" title="Set value for general purpose outputs.">GPIOSetVal()</a> </dd>
+<dd>
+<a class="el" href="mbed__gpio_8h.html#a2302b858d97f2a0a1f1c30539edcc868" title="Toggle value for general purpose outputs.">GPIOToggle()</a> </dd></dl>
 
 </div>
 </div>
@@ -225,6 +229,41 @@ Functions</h2></td></tr>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__gpio.html">General purpose I/O pins</a> </dd>
 <dd>
 <a class="el" href="group__gpiolvl.html">GPIO levels</a> </dd>
+<dd>
+<a class="el" href="mbed__gpio_8h.html#a2302b858d97f2a0a1f1c30539edcc868" title="Toggle value for general purpose outputs.">GPIOToggle()</a> </dd>
+<dd>
+<a class="el" href="mbed__gpio_8h.html#a31f1ab5713448e3d116a1f8e3b5279a5" title="Read value from general purpose inputs.">GPIOReadVal()</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2302b858d97f2a0a1f1c30539edcc868"></a><!-- doxytag: member="mbed_gpio.h::GPIOToggle" ref="a2302b858d97f2a0a1f1c30539edcc868" args="(uint32_t)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GPIOToggle </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>pin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Toggle value for general purpose outputs. </p>
+<p>This routine toggles the output value for the indicated GP pin. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pin</td><td>Pin to be toggled, should be MBED_GPIOx.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="group__gpio.html">General purpose I/O pins</a> </dd>
+<dd>
+<a class="el" href="group__gpiolvl.html">GPIO levels</a> </dd>
+<dd>
+<a class="el" href="mbed__gpio_8h.html#a344e9371bb21f52a9a5c20cf1cc1ecca" title="Set value for general purpose outputs.">GPIOSetVal()</a> </dd>
 <dd>
 <a class="el" href="mbed__gpio_8h.html#a31f1ab5713448e3d116a1f8e3b5279a5" title="Read value from general purpose inputs.">GPIOReadVal()</a> </dd></dl>
 
@@ -378,7 +417,7 @@ Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 13 2011 09:39:23 for mbed-lib by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 18 2011 14:41:50 for mbed-lib by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

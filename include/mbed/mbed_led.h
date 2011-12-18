@@ -17,9 +17,9 @@
 #define MBED_LED3	(1 << 23)
 
 void initLED(void);
-void ledOn(uint32_t);
-void ledOff(uint32_t);
-void ledToggle(uint32_t);
+void LEDOn(uint32_t);
+void LEDOff(uint32_t);
+void LEDToggle(uint32_t);
 
 #endif
 

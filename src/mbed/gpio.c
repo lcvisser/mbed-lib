@@ -359,6 +359,7 @@ void initGPIO(uint32_t mode, uint32_t gpioConfig) {
  *
  * \sa gpio
  * \sa gpiolvl
+ * \sa GPIOToggle()
  * \sa GPIOReadVal()
  */
 void GPIOSetVal(uint32_t pin, uint8_t val) {
@@ -414,6 +415,71 @@ void GPIOSetVal(uint32_t pin, uint8_t val) {
 	}
 }
 
+/*! \brief Toggle value for general purpose outputs.
+ *
+ * This routine toggles the output value for the indicated GP pin.
+ * \param pin	Pin to be toggled, should be MBED_GPIOx.
+ *
+ * \sa gpio
+ * \sa gpiolvl
+ * \sa GPIOSetVal()
+ * \sa GPIOReadVal()
+ */
+void GPIOToggle(uint32_t pin) {
+	uint8_t portNo;
+	uint32_t pinNo;
+	uint32_t currentVal;
+
+	if (_mbedGPOCfg & pin) {
+		if (MBED_GPIO_P0 & pin) {
+			portNo = 0;
+		} else if (MBED_GPIO_P1 & pin) {
+			portNo = 1;
+		} else if (MBED_GPIO_P2 & pin) {
+			portNo = 2;
+		} else {
+			return;
+		}
+
+		switch (pin) {
+			case MBED_GPIO5:	pinNo = (1 << GPIO5);	break;
+			case MBED_GPIO6:	pinNo = (1 << GPIO6);	break;
+			case MBED_GPIO7:	pinNo = (1 << GPIO7);	break;
+			case MBED_GPIO8:	pinNo = (1 << GPIO8);	break;
+			case MBED_GPIO9:	pinNo = (1 << GPIO9);	break;
+			case MBED_GPIO10:	pinNo = (1 << GPIO10);	break;
+			case MBED_GPIO11:	pinNo = (1 << GPIO11);	break;
+			case MBED_GPIO12:	pinNo = (1 << GPIO12);	break;
+			case MBED_GPIO13:	pinNo = (1 << GPIO13);	break;
+			case MBED_GPIO14:	pinNo = (1 << GPIO14);	break;
+			case MBED_GPIO15:	pinNo = (1 << GPIO15);	break;
+			case MBED_GPIO16:	pinNo = (1 << GPIO16);	break;
+			case MBED_GPIO17:	pinNo = (1 << GPIO17);	break;
+			case MBED_GPIO18:	pinNo = (1 << GPIO18);	break;
+			case MBED_GPIO19:	pinNo = (1 << GPIO19);	break;
+			case MBED_GPIO20:	pinNo = (1 << GPIO20);	break;
+			case MBED_GPIO21:	pinNo = (1 << GPIO21);	break;
+			case MBED_GPIO22:	pinNo = (1 << GPIO22);	break;
+			case MBED_GPIO23:	pinNo = (1 << GPIO23);	break;
+			case MBED_GPIO24:	pinNo = (1 << GPIO24);	break;
+			case MBED_GPIO25:	pinNo = (1 << GPIO25);	break;
+			case MBED_GPIO26:	pinNo = (1 << GPIO26);	break;
+			case MBED_GPIO27:	pinNo = (1 << GPIO27);	break;
+			case MBED_GPIO28:	pinNo = (1 << GPIO28);	break;
+			case MBED_GPIO29:	pinNo = (1 << GPIO29);	break;
+			case MBED_GPIO30:	pinNo = (1 << GPIO30);	break;
+			default: return;
+		}
+
+		currentVal = GPIO_ReadValue(portNo);
+		if (currentVal & pinNo) {
+			GPIO_ClearValue(portNo, pinNo);
+		} else {
+			GPIO_SetValue(portNo, pinNo);
+		}
+	}
+}
+
 /*! \brief Read value from general purpose inputs.
  *
  * This routine reads the output value from the indicated GP pin.
@@ -425,6 +491,7 @@ void GPIOSetVal(uint32_t pin, uint8_t val) {
  * \sa gpio
  * \sa gpiolvl
  * \sa GPIOSetVal()
+ * \sa GPIOToggle()
  */
 uint8_t GPIOReadVal(uint32_t pin) {
 	uint8_t portNo;

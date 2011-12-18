@@ -68,9 +68,9 @@ void initSys(uint32_t flags) {
 	if ( !(mbedStatus & MBED_LED_INIT) && (flags & INIT_LED) ) {
 		initLED();
 		if (mbedStatus & MBED_TIMER0_INIT) {
-			ledOn(MBED_LED0 | MBED_LED1 | MBED_LED2 | MBED_LED3);
+			LEDOn(MBED_LED0 | MBED_LED1 | MBED_LED2 | MBED_LED3);
 			delay(MBED_TIMER0, 200);
-			ledOff(MBED_LED0 | MBED_LED1 | MBED_LED2 | MBED_LED3);
+			LEDOff(MBED_LED0 | MBED_LED1 | MBED_LED2 | MBED_LED3);
 		}
 	}
 
