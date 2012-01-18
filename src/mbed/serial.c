@@ -144,13 +144,13 @@ uint32_t serialSend(uint8_t portNo, uint8_t* txbuf, uint32_t len) {
 
 	switch (portNo) {
 		case MBED_SERIAL0:
-			r =  UART_Send((LPC_UART_TypeDef*)LPC_UART1, txbuf, len, NONE_BLOCKING);
+			r =  UART_Send((LPC_UART_TypeDef*)LPC_UART1, txbuf, len, BLOCKING);
 			break;
 		case MBED_SERIAL1:
-			r =  UART_Send(LPC_UART2, txbuf, len, NONE_BLOCKING);
+			r =  UART_Send(LPC_UART2, txbuf, len, BLOCKING);
 			break;
 		case MBED_SERIAL2:
-			r =  UART_Send(LPC_UART3, txbuf, len, NONE_BLOCKING);
+			r =  UART_Send(LPC_UART3, txbuf, len, BLOCKING);
 			break;
 		default:
 			break;
