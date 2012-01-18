@@ -58,7 +58,7 @@ uint32_t miniUSBSend(uint8_t* txbuf, uint32_t len) {
 }
 
 uint32_t miniUSBRecv(uint8_t* rxbuf, uint32_t len) {
-	return UART_Receive(LPC_UART0, rxbuf, len, BLOCKING);
+	return UART_Receive(LPC_UART0, rxbuf, len, NONE_BLOCKING);
 }
 
 uint32_t miniUSBRecvReady(void) {
